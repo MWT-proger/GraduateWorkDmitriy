@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+
+  mongodb:
+    image: mongodb/mongodb-community-server:7.0.6-ubi8
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - "${MONGO_INITDB_PORT}:27017"
+    volumes:
+      - "data_db:/data/db:rw"
+
+  app:
+    container_name: app
+    restart: always
+    build:
+      context: ./..
+      dockerfile: deployments/app/Dockerfile
+    depends_on:
+      - mongodb
+    command: ["python", "main.py"]
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    volumes:
+      - "../app:/usr/app:rw"
+    environment:
+      PROJECT_NAME: ${APP_PROJECT_NAME}
+      DEBUG: ${APP_DEBUG}
+      PORT: ${APP_PORT}
+
+      DB_NAME: ${MONGO_INITDB_DATABASE}
+      DB_PORT: ${MONGO_INITDB_PORT}
+      DB_HOST: mongodb
+
+      DB_USER: ${MONGO_INITDB_ROOT_USERNAME}
+      DB_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+volumes:
+  data_db:
+    name: mongodb_data_db
