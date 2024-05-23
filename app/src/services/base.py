@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from schemas import CreateUserSchema
+
 class BaseService(ABC):
 
     def __init__(self, db) -> None:
@@ -11,4 +13,9 @@ class BaseService(ABC):
         ...
 
 class BaseUserService(BaseService):
-    pass
+    
+    @abstractmethod
+    def create(self, data: CreateUserSchema):
+        ...
+
+class BaseAuthService(BaseService): ...

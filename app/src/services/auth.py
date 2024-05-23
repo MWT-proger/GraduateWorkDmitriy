@@ -1,5 +1,4 @@
 from functools import lru_cache
-from abc import abstractmethod
 
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
@@ -8,13 +7,10 @@ from exceptions.user import UserServiceException
 from schemas import CreateUserSchema
 from db.mongodb import get_db
 
-from .base import BaseUserService
+from services.base import BaseAuthService
 
 
-class UserService(BaseUserService):
-    
-    def create(self, data: CreateUserSchema):
-       raise UserServiceException(name="222")
+class AuthService(BaseAuthService):
     
     def login(self, data: CreateUserSchema):
        raise UserServiceException(name="222")
@@ -27,7 +23,7 @@ class UserService(BaseUserService):
 
 
 @lru_cache()
-def get_user_service(
+def get_auth_service(
     db: AsyncIOMotorDatabase = Depends(get_db)
-) -> UserService:
-    return UserService(db=db)
+) -> AuthService:
+    return AuthService(db=db)

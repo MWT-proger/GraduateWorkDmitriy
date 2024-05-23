@@ -6,8 +6,5 @@ from core.config import settings
 
 mongodb: Optional[AsyncIOMotorClient] = None
 
-async def get_elastic() -> AsyncIOMotorClient:
-    return mongodb
-
 def get_db() -> AsyncIOMotorDatabase:
     return mongodb[settings.MONGODB.NAME]

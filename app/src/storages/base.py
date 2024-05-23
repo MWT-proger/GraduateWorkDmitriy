@@ -11,4 +11,10 @@ class BaseStorage(ABC):
         ...
 
 class BaseUserStorage(BaseStorage):
-    pass
+    @abstractmethod
+    def create(self):
+        ...
+
+    @abstractmethod
+    def update(self):
+        ...
