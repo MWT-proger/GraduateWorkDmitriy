@@ -23,7 +23,8 @@ services:
       dockerfile: deployments/app/Dockerfile
     depends_on:
       - mongodb
-    command: ["python", "main.py"]
+    # command: ["python", "main.py"]
+    command: ["uvicorn", "main:app", "--host", "localhost", "--port", "${APP_PORT}", "--reload"]
     ports:
       - "${APP_PORT}:${APP_PORT}"
     volumes:
@@ -33,12 +34,12 @@ services:
       DEBUG: ${APP_DEBUG}
       PORT: ${APP_PORT}
 
-      DB_NAME: ${MONGO_INITDB_DATABASE}
-      DB_PORT: ${MONGO_INITDB_PORT}
-      DB_HOST: mongodb
+      MONGODB_NAME: ${MONGO_INITDB_DATABASE}
+      MONGODB_PORT: ${MONGO_INITDB_PORT}
+      MONGODB_HOST: mongodb
 
-      DB_USER: ${MONGO_INITDB_ROOT_USERNAME}
-      DB_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGODB_USER: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGODB_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
 volumes:
   data_db:

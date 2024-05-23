@@ -1,2 +1,4 @@
 fastapi==0.111.0
 uvicorn==0.29.0
+pydantic-settings==2.2.1
+motor==3.4.0
