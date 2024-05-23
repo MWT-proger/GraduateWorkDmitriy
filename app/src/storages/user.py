@@ -1,6 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from core.config import settings
+
 from .base import BaseUserStorage
 
 

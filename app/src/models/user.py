@@ -1,4 +1,4 @@
-from pydantic import Field, EmailStr
+from pydantic import EmailStr, Field
 
 from .base import BaseUUIDModel
 
@@ -10,6 +10,10 @@ class User(BaseUUIDModel):
 
 
 class Profile(BaseUUIDModel):
-    full_name: str = Field(min_length=3, max_length=100, example="Иванов Иван Иванович")
-    phone_number: str = Field(min_length=10, max_length=15, example="+79990000000")
+    full_name: str = Field(
+        min_length=3, max_length=100, example="Иванов Иван Иванович"
+    )
+    phone_number: str = Field(
+        min_length=10, max_length=15, example="+79990000000"
+    )
     user: User

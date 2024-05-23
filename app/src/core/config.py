@@ -5,11 +5,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from core.logger import LOGGING
 
+
 class MongoCollections:
     USERS = "users"
 
+
 class MongoDB(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix='MONGODB_')
+    model_config = SettingsConfigDict(env_prefix="MONGODB_")
 
     NAME: str
     PORT: str
@@ -18,11 +20,9 @@ class MongoDB(BaseSettings):
     PASSWORD: str
     COLLECTIONS: MongoCollections = MongoCollections()
 
-   
     @property
     def DSN(self):
         return f"mongodb://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}"
-
 
 
 class Settings(BaseSettings):
@@ -32,7 +32,6 @@ class Settings(BaseSettings):
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     MONGODB: MongoDB = MongoDB()
-
 
 
 settings = Settings()
