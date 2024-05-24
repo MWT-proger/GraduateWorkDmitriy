@@ -5,10 +5,22 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from core.logger import LOGGING
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 class MongoCollections:
     USERS = "users"
     PROFILES = "profiles"
+
+
+class EmailConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="EMAIL_")
+    TEMPLATES: str = os.path.dirname(BASE_DIR) + "/src/template/"
+    HOST: str = ""
+    PORT: int = 465
+    HOST_USER: str = ""
+    HOST_PASSWORD: str = ""
+    DEFAULT_FROM_EMAIL: str = ""
 
 
 class MongoDB(BaseSettings):
@@ -31,9 +43,10 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     PROJECT_NAME: str = "app"
     PORT: str = "8000"
-    BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    BASE_DIR: str = BASE_DIR
 
     MONGODB: MongoDB = MongoDB()
+    EMAIL: EmailConfig = EmailConfig()
 
 
 settings = Settings()

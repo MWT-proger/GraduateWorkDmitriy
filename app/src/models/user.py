@@ -13,6 +13,7 @@ class User(BaseUUIDModel):
     is_active: bool = False
     updated_at: datetime = Field(default_factory=datetime_now)
     created_at: datetime = Field(default_factory=datetime_now)
+    otp_code: str = None
 
 
 class Profile(BaseUUIDModel):
