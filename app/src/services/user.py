@@ -53,17 +53,16 @@ class UserService(BaseUserService):
             await self.storage.create_user_and_profile(
                 user=user, profile=profile
             )
-        except Exception as e:
-            raise UserServiceException(
-                "Ошибка при создании пользователя"
-            ) from e
-
-        email_service.send_email_confirm(
+            await email_service.send_email_confirm(
             to=[
                 data.email,
             ],
             otp_code=otp_code,
         )
+        except Exception as e:
+            raise UserServiceException(
+                "Ошибка при создании пользователя"
+            ) from e
 
 
 @lru_cache()
