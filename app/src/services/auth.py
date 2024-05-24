@@ -56,8 +56,14 @@ class AuthService(BaseAuthService):
 
         return access_token, refresh_token
 
-    async def logout(self, data: CreateUserSchema):
-        pass
+    async def logout(self, user_id: str, user_agent: str, access: str):
+        auth = await self.storage.get_by_user_id_and_user_agent(
+            user_id, user_agent
+        )
+
+        if auth:
+            await self.storage.delete_by_id(obj_id=auth.id)
+        print("Отзываем Access", access)
 
     async def refresh(self, data: CreateUserSchema):
         pass
@@ -76,6 +82,7 @@ class AuthService(BaseAuthService):
     def _create_refresh_token(self, user):
         to_encode = {
             "sub": str(user.id),
+            "refresh": True,
             "exp": datetime.now()
             + timedelta(days=settings.JWT.REFRESH_TOKEN_EXPIRE_DAYS),
         }
@@ -83,6 +90,29 @@ class AuthService(BaseAuthService):
             to_encode, settings.SECRET_KEY, algorithm=self.ALGORITHM
         )
         return encoded_jwt
+
+    def get_user_id_from_jwt(self, jwtoken: str) -> dict:
+        try:
+            payload = jwt.decode(
+                jwtoken, settings.SECRET_KEY, algorithms=[self.ALGORITHM]
+            )
+        except Exception:
+            return None
+        
+        if payload.get("refresh"):
+            return None
+        return payload.get("sub")
+
+    def get_user_id_from_refresh_jwt(self, jwtoken: str) -> dict:
+        try:
+            payload = jwt.decode(
+                jwtoken, settings.SECRET_KEY, algorithms=[self.ALGORITHM]
+            )
+        except Exception:
+            return None
+        if not payload.get("refresh"):
+            return None
+        return payload.get("sub")
 
 
 @lru_cache()

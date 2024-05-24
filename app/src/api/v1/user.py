@@ -7,6 +7,7 @@ from schemas import (
     CreateUserSchema,
     SuccessSchema,
 )
+from schemas.auth import AuthJWTSchema
 from services import BaseUserService, get_user_service
 
 router = APIRouter(
@@ -27,15 +28,16 @@ async def create(
 
 @router.post(
     "/change_password",
-    dependencies=[Depends(JWTBearer())],
     response_model=SuccessSchema,
 )
 async def change_password(
     data: ChangePasswordUserSchema,
+    auth_data: AuthJWTSchema = Depends(JWTBearer()),
     service: BaseUserService = Depends(get_user_service),
 ):
-    user = service.create(data)
-    return user
+    await service.change_password(user_id=auth_data.user_id, data=data)
+
+    return SuccessSchema(msg="Успешно")
 
 
 @router.post("/confirm_email", response_model=SuccessSchema)
@@ -44,12 +46,16 @@ async def confirm_email(
     service: BaseUserService = Depends(get_user_service),
 ):
     await service.confirm_email(data)
+
     return SuccessSchema(msg="Успешно")
 
 
-@router.delete(
-    "", dependencies=[Depends(JWTBearer())], response_model=SuccessSchema
-)
-async def remove(service: BaseUserService = Depends(get_user_service)):
-    await service.remove()
+@router.delete("", response_model=SuccessSchema)
+async def remove(
+    auth_data: AuthJWTSchema = Depends(JWTBearer()),
+    service: BaseUserService = Depends(get_user_service),
+):
+
+    await service.remove(user_id=auth_data.user_id)
+
     return SuccessSchema(msg="Успешно")

@@ -1,5 +1,7 @@
 from functools import lru_cache
+from typing import Optional
 
+from bson import ObjectId
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
@@ -35,6 +37,17 @@ class AuthStorageMongoDB(BaseAuthStorage):
             {"$set": {"refresh_token": new_refresh_token}},
             upsert=True,
         )
+
+    async def get_by_user_id_and_user_agent(
+        self, user_id: str, user_agent: str
+    ) -> Optional[Auth]:
+        auth_doc = await self.collection.find_one(
+            {"user_id": user_id, "user_agent": user_agent}
+        )
+        return Auth(**auth_doc) if auth_doc else None
+
+    async def delete_by_id(self, obj_id: str):
+        await self.collection.delete_one({"_id": ObjectId(obj_id)})
 
 
 @lru_cache()

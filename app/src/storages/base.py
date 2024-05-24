@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from models import Profile, User
 from models.auth import Auth
@@ -53,3 +54,8 @@ class BaseAuthStorage(BaseStorage):
     async def upsert(
         self, user_id: str, user_agent: str, new_refresh_token: str
     ): ...
+
+    @abstractmethod
+    async def get_by_user_id_and_user_agent(
+        self, user_id: str, user_agent: str
+    ) -> Optional[Auth]: ...
