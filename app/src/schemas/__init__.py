@@ -1,10 +1,12 @@
 from .auth import LoginSchema, TokenJWTSchema
-from .user import ChangePasswordUserSchema, CreateUserSchema, VerifyEmailSchema
+from .base import SuccessSchema
+from .user import ChangePasswordUserSchema, CreateUserSchema, ConfirmEmailSchema
 
 __all__ = [
+    "SuccessSchema",
     "LoginSchema",
     "TokenJWTSchema",
     "ChangePasswordUserSchema",
     "CreateUserSchema",
-    "VerifyEmailSchema",
+    "ConfirmEmailSchema",
 ]

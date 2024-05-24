@@ -21,6 +21,6 @@ class ChangePasswordUserSchema(BaseModel):
     )
 
 
-class VerifyEmailSchema(BaseModel):
+class ConfirmEmailSchema(BaseModel):
     email: EmailStr
-    verification_code: str
+    otp_code: str
