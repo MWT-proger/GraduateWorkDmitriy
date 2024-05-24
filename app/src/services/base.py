@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from storages import BaseUserStorage
 from schemas import CreateUserSchema
+from storages import BaseUserStorage
 
 
 class BaseService(ABC):

@@ -1,4 +1,3 @@
-from uuid import UUID
 from bson import ObjectId
 from pydantic import EmailStr, Field
 

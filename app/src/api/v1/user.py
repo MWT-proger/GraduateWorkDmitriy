@@ -1,10 +1,19 @@
 from fastapi import APIRouter, Depends
 
 from auth.auth_bearer import JWTBearer
-from schemas import ChangePasswordUserSchema, CreateUserSchema, TokenJWTSchema, SuccessSchema, ConfirmEmailSchema
+from schemas import (
+    ChangePasswordUserSchema,
+    ConfirmEmailSchema,
+    CreateUserSchema,
+    SuccessSchema,
+)
 from services import BaseUserService, get_user_service
 
-router = APIRouter(tags=["User",])
+router = APIRouter(
+    tags=[
+        "User",
+    ]
+)
 
 
 @router.post("", response_model=SuccessSchema, status_code=201)
@@ -16,7 +25,11 @@ async def create(
     return user
 
 
-@router.post("/change_password", dependencies=[Depends(JWTBearer())], response_model=SuccessSchema)
+@router.post(
+    "/change_password",
+    dependencies=[Depends(JWTBearer())],
+    response_model=SuccessSchema,
+)
 async def change_password(
     data: ChangePasswordUserSchema,
     service: BaseUserService = Depends(get_user_service),
@@ -34,7 +47,9 @@ async def confirm_email(
     return user
 
 
-@router.delete("", dependencies=[Depends(JWTBearer())], response_model=SuccessSchema)
+@router.delete(
+    "", dependencies=[Depends(JWTBearer())], response_model=SuccessSchema
+)
 async def remove(service: BaseUserService = Depends(get_user_service)):
     user = service.create()
     return user

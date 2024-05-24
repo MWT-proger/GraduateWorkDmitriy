@@ -10,13 +10,32 @@ class BaseStorage(ABC):
 
 
 class BaseUserStorage(BaseStorage):
-    
     @abstractmethod
-    async def create_user_and_profile(self, user: User, profile: Profile):
-        pass
+    async def create_user_and_profile(self, user: User, profile: Profile): ...
+
+    @abstractmethod
+    async def get_by_email(self, email: str): ...
+
+    @abstractmethod
+    async def activate_user(self, email: str, otp_code: str): ...
+
+    @abstractmethod
+    async def get_by_email_and_otp(self, email: str, otp_code: str): ...
+
+    @abstractmethod
+    async def get_by_username(self, username: str): ...
+
+    @abstractmethod
+    async def get_by_id(self, user_id: str): ...
+
+    @abstractmethod
+    async def delete_by_id(self, user_id: str): ...
+
+    @abstractmethod
+    async def change_password(self, user_id: str, new_password: str): ...
+
 
 class BaseProfileStorage(BaseStorage):
 
     @abstractmethod
-    async def create(self, profile: Profile, session = None):
-        ...
+    async def create(self, profile: Profile, session=None): ...

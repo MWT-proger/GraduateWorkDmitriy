@@ -1,3 +1,3 @@
 class ServiceException(Exception):
-    def __init__(self, name: str):
-        self.name = name
+    def __init__(self, msg: str):
+        self.msg = msg

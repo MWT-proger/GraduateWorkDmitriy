@@ -1,4 +1,5 @@
-from .user import User, Profile
+from .user import Profile, User
+
 __all__ = [
     "User",
     "Profile",

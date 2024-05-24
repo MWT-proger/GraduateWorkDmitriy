@@ -2,6 +2,11 @@ from pydantic import BaseModel, EmailStr, Field
 
 
 class CreateUserSchema(BaseModel):
+    """TODO: В будущем можно проверять:
+    - правильную форму номера телефона
+    - пароль на простоту и т.д.
+    """
+
     username: str = Field(min_length=3, max_length=50, example="user123")
     password: str = Field(min_length=8, example="securepassword123")
     email: EmailStr = Field(example="user@example.com")

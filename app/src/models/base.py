@@ -1,6 +1,4 @@
-from uuid import UUID, uuid4
 from bson import ObjectId
-
 from pydantic import BaseModel, ConfigDict, Field
 
 
