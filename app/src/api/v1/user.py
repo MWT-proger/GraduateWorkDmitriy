@@ -43,13 +43,13 @@ async def confirm_email(
     data: ConfirmEmailSchema,
     service: BaseUserService = Depends(get_user_service),
 ):
-    user = service.create(data)
-    return user
+    await service.confirm_email(data)
+    return SuccessSchema(msg="Успешно")
 
 
 @router.delete(
     "", dependencies=[Depends(JWTBearer())], response_model=SuccessSchema
 )
 async def remove(service: BaseUserService = Depends(get_user_service)):
-    user = service.create()
-    return user
+    await service.remove()
+    return SuccessSchema(msg="Успешно")

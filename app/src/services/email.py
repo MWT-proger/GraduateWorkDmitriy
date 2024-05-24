@@ -1,18 +1,26 @@
-import aiosmtplib
 from email.message import EmailMessage
 from typing import List
 
-from core.config import settings
+import aiosmtplib
 from jinja2 import Environment, FileSystemLoader
+
+from core.config import settings
+
 
 class EmailService:
     def __init__(self):
         return
 
     async def get_server(self):
-        server = aiosmtplib.SMTP(hostname=settings.EMAIL.HOST, port=settings.EMAIL.PORT, use_tls=True)
+        server = aiosmtplib.SMTP(
+            hostname=settings.EMAIL.HOST,
+            port=settings.EMAIL.PORT,
+            use_tls=True,
+        )
         await server.connect()
-        await server.login(settings.EMAIL.HOST_USER, settings.EMAIL.HOST_PASSWORD)
+        await server.login(
+            settings.EMAIL.HOST_USER, settings.EMAIL.HOST_PASSWORD
+        )
         return server
 
     def get_template(self, path_template: str):

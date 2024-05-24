@@ -7,7 +7,7 @@ from auth.password_manager import get_password_manager
 from core.utils import create_otp
 from exceptions.user import UserServiceException
 from models import Profile, User
-from schemas import CreateUserSchema
+from schemas import ConfirmEmailSchema, CreateUserSchema
 from services.email import get_email_service
 from storages import get_user_storage
 
@@ -54,15 +54,23 @@ class UserService(BaseUserService):
                 user=user, profile=profile
             )
             await email_service.send_email_confirm(
-            to=[
-                data.email,
-            ],
-            otp_code=otp_code,
-        )
+                to=[
+                    data.email,
+                ],
+                otp_code=otp_code,
+            )
         except Exception as e:
             raise UserServiceException(
                 "Ошибка при создании пользователя"
             ) from e
+
+    async def confirm_email(self, data: ConfirmEmailSchema):
+        user = await self.storage.get_by_email_and_otp(
+            email=data.email, otp_code=data.otp_code
+        )
+        if not user:
+            raise UserServiceException("Неверный код")
+        await self.storage.activate_user(user_id=user.id)
 
 
 @lru_cache()

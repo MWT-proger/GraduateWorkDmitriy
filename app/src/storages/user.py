@@ -23,7 +23,7 @@ class UserStorageMongoDB(BaseUserStorage):
         self.collection = db.get_collection(settings.MONGODB.COLLECTIONS.USERS)
         self.db = db
 
-    async def _find_user(self, query: dict):
+    async def _find_user(self, query: dict) -> User:
         query["is_active"] = True
         user_doc = await self.collection.find_one(query)
         return User(**user_doc) if user_doc else None
@@ -53,23 +53,23 @@ class UserStorageMongoDB(BaseUserStorage):
             {"$set": {"is_active": True, "updated_at": datetime.now()}},
         )
 
-    async def get_by_email_and_otp(self, email: str, otp_code: str):
+    async def get_by_email_and_otp(self, email: str, otp_code: str) -> User:
         user_doc = await self.collection.find_one(
             {"email": email.lower(), "otp_code": otp_code}
         )
         return User(**user_doc) if user_doc else None
 
-    async def get_by_email(self, email: str):
+    async def get_by_email(self, email: str) -> User:
         user_doc = await self.collection.find_one({"email": email.lower()})
         return User(**user_doc) if user_doc else None
 
-    async def get_by_username(self, username: str):
+    async def get_by_username(self, username: str) -> User:
         user_doc = await self.collection.find_one(
             {"username": username.lower()}
         )
         return User(**user_doc) if user_doc else None
 
-    async def get_by_id(self, user_id: str):
+    async def get_by_id(self, user_id: str) -> User:
         return await self._find_user({"_id": ObjectId(user_id)})
 
     async def delete_by_id(self, user_id: str):
