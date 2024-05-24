@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from schemas import ConfirmEmailSchema, CreateUserSchema, LoginSchema
+from schemas.user import ChangePasswordUserSchema
 from storages import BaseUserStorage
 from storages.base import BaseAuthStorage
 
@@ -19,6 +20,14 @@ class BaseUserService(BaseService):
 
     @abstractmethod
     async def confirm_email(self, data: ConfirmEmailSchema): ...
+
+    @abstractmethod
+    async def remove(self, user_id): ...
+
+    @abstractmethod
+    async def change_password(
+        self, user_id: str, data: ChangePasswordUserSchema
+    ): ...
 
 
 class BaseAuthService(BaseService):

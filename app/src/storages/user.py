@@ -84,7 +84,12 @@ class UserStorageMongoDB(BaseUserStorage):
     async def change_password(self, user_id: str, new_password: str):
         await self.collection.update_one(
             {"_id": ObjectId(user_id)},
-            {"$set": {"password": new_password, "updated_at": datetime.now()}},
+            {
+                "$set": {
+                    "password_hash": new_password,
+                    "updated_at": datetime.now(),
+                }
+            },
         )
 
 
