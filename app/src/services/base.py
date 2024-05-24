@@ -1,21 +1,23 @@
 from abc import ABC, abstractmethod
 
+from storages import BaseUserStorage
 from schemas import CreateUserSchema
 
 
 class BaseService(ABC):
 
-    def __init__(self, db) -> None:
-        self.db = db
+    def __init__(self, storage) -> None:
+        self.storage = storage
 
     @abstractmethod
-    def create(self): ...
+    async def create(self): ...
 
 
 class BaseUserService(BaseService):
+    storage: BaseUserStorage
 
     @abstractmethod
-    def create(self, data: CreateUserSchema): ...
+    async def create(self, data: CreateUserSchema): ...
 
 
 class BaseAuthService(BaseService): ...

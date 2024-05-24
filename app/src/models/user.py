@@ -1,3 +1,5 @@
+from uuid import UUID
+from bson import ObjectId
 from pydantic import EmailStr, Field
 
 from .base import BaseUUIDModel
@@ -16,4 +18,4 @@ class Profile(BaseUUIDModel):
     phone_number: str = Field(
         min_length=10, max_length=15, example="+79990000000"
     )
-    user: User
+    user_id: ObjectId

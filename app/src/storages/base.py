@@ -1,18 +1,22 @@
 from abc import ABC, abstractmethod
 
+from models import Profile, User
+
 
 class BaseStorage(ABC):
 
     def __init__(self, db) -> None:
         self.db = db
 
-    @abstractmethod
-    def create(self): ...
-
 
 class BaseUserStorage(BaseStorage):
+    
     @abstractmethod
-    def create(self): ...
+    async def create_user_and_profile(self, user: User, profile: Profile):
+        pass
+
+class BaseProfileStorage(BaseStorage):
 
     @abstractmethod
-    def update(self): ...
+    async def create(self, profile: Profile, session = None):
+        ...

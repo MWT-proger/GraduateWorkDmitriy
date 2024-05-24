@@ -3,7 +3,8 @@ from functools import lru_cache
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
-from db.mongodb import get_db
+from models import User, Profile
+from storages import get_user_storage
 from exceptions.user import UserServiceException
 from schemas import CreateUserSchema
 
@@ -12,21 +13,19 @@ from .base import BaseUserService
 
 class UserService(BaseUserService):
 
-    def create(self, data: CreateUserSchema):
-        raise UserServiceException(name="222")
-
-    def login(self, data: CreateUserSchema):
-        raise UserServiceException(name="222")
-
-    def logout(self, data: CreateUserSchema):
-        raise UserServiceException(name="222")
-
-    def refresh(self, data: CreateUserSchema):
-        raise UserServiceException(name="222")
+    async def create(self, data: CreateUserSchema):
+        user = User(
+            username=data.username,
+            email=data.email,
+            password=data.password,
+        )
+        profile = Profile(user_id=user.id, full_name=data.full_name, phone_number=data.phone_number)
+        await self.storage.create_user_and_profile(user=user, profile=profile)
+        
 
 
 @lru_cache()
 def get_user_service(
-    db: AsyncIOMotorDatabase = Depends(get_db),
+    storage: AsyncIOMotorDatabase = Depends(get_user_storage),
 ) -> UserService:
-    return UserService(db=db)
+    return UserService(storage=storage)

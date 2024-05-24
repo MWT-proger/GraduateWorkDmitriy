@@ -8,6 +8,7 @@ from core.logger import LOGGING
 
 class MongoCollections:
     USERS = "users"
+    PROFILES = "profiles"
 
 
 class MongoDB(BaseSettings):
