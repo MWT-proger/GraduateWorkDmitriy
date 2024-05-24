@@ -49,6 +49,14 @@ class AuthStorageMongoDB(BaseAuthStorage):
     async def delete_by_id(self, obj_id: str):
         await self.collection.delete_one({"_id": ObjectId(obj_id)})
 
+    async def get_by_refresh_token_and_user_agent(
+        self, refresh_token: str, user_agent: str
+    ) -> Optional[Auth]:
+        auth_doc = await self.collection.find_one(
+            {"refresh_token": refresh_token, "user_agent": user_agent}
+        )
+        return Auth(**auth_doc) if auth_doc else None
+
 
 @lru_cache()
 def get_auth_storage(

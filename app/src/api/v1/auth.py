@@ -59,7 +59,6 @@ async def refresh(
     user_agent = request.headers.get("user-agent")
 
     access_token, refresh_token = await service.refresh(
-        user_id=auth_data.user_id,
         user_agent=user_agent,
         refresh=auth_data.token,
     )

@@ -7,7 +7,7 @@ from fastapi import Depends
 from auth.password_manager import get_password_manager
 from core.config import settings
 from exceptions.auth import AuthServiceException
-from schemas import CreateUserSchema, LoginSchema
+from schemas import LoginSchema
 from services.base import BaseAuthService
 from storages import BaseAuthStorage
 from storages.auth import get_auth_storage
@@ -45,8 +45,8 @@ class AuthService(BaseAuthService):
                 msg="Неверное имя пользователя или пароль"
             )
 
-        access_token = self._create_access_token(user)
-        refresh_token = self._create_refresh_token(user)
+        access_token = self._create_access_token(user.id)
+        refresh_token = self._create_refresh_token(user.id)
 
         await self.storage.upsert(
             user_id=str(user.id),
@@ -65,12 +65,27 @@ class AuthService(BaseAuthService):
             await self.storage.delete_by_id(obj_id=auth.id)
         print("Отзываем Access", access)
 
-    async def refresh(self, data: CreateUserSchema):
-        pass
+    async def refresh(self, user_agent: str, refresh: str):
+        auth = await self.storage.get_by_refresh_token_and_user_agent(
+            refresh, user_agent
+        )
+        if not auth:
+            raise AuthServiceException("Токен не валидный")
 
-    def _create_access_token(self, user):
+        access_token = self._create_access_token(auth.user_id)
+        refresh_token = self._create_refresh_token(auth.user_id)
+
+        await self.storage.upsert(
+            user_id=str(auth.user_id),
+            user_agent=user_agent,
+            new_refresh_token=refresh_token,
+        )
+
+        return access_token, refresh_token
+
+    def _create_access_token(self, user_id):
         to_encode = {
-            "sub": str(user.id),
+            "sub": str(user_id),
             "exp": datetime.now()
             + timedelta(minutes=settings.JWT.ACCESS_TOKEN_EXPIRE_MINUTES),
         }
@@ -79,9 +94,9 @@ class AuthService(BaseAuthService):
         )
         return encoded_jwt
 
-    def _create_refresh_token(self, user):
+    def _create_refresh_token(self, user_id):
         to_encode = {
-            "sub": str(user.id),
+            "sub": str(user_id),
             "refresh": True,
             "exp": datetime.now()
             + timedelta(days=settings.JWT.REFRESH_TOKEN_EXPIRE_DAYS),
@@ -98,7 +113,7 @@ class AuthService(BaseAuthService):
             )
         except Exception:
             return None
-        
+
         if payload.get("refresh"):
             return None
         return payload.get("sub")
