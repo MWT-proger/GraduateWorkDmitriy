@@ -60,10 +60,14 @@ class UserStorageMongoDB(BaseUserStorage):
         return User(**user_doc) if user_doc else None
 
     async def get_by_email(self, email: str):
-        return await self._find_user({"email": email.lower()})
+        user_doc = await self.collection.find_one({"email": email.lower()})
+        return User(**user_doc) if user_doc else None
 
     async def get_by_username(self, username: str):
-        return await self._find_user({"username": username.lower()})
+        user_doc = await self.collection.find_one(
+            {"username": username.lower()}
+        )
+        return User(**user_doc) if user_doc else None
 
     async def get_by_id(self, user_id: str):
         return await self._find_user({"_id": ObjectId(user_id)})

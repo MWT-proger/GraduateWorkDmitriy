@@ -41,6 +41,7 @@ services:
       - "../app:/usr/app:rw"
     environment:
       PROJECT_NAME: ${APP_PROJECT_NAME}
+      SECRET_KEY: ${APP_SECRET_KEY}
       DEBUG: ${APP_DEBUG}
       PORT: ${APP_PORT}
 

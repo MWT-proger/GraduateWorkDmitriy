@@ -3,6 +3,7 @@ from functools import lru_cache
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
+from auth.password_manager import get_password_manager
 from exceptions.user import UserServiceException
 from models import Profile, User
 from schemas import CreateUserSchema
@@ -14,24 +15,28 @@ from .base import BaseUserService
 class UserService(BaseUserService):
 
     async def check_exist_email(self, email: str):
-        is_existed_email = self.storage.get_by_email(email)
-        if is_existed_email:
-            return UserServiceException(
+        if await self.storage.get_by_email(email):
+            raise UserServiceException(
                 "Пользователь с указанным адресом электронной почты уже существует."
             )
 
+    async def check_exist_username(self, username: str):
+        if await self.storage.get_by_username(username):
+            raise UserServiceException(
+                "Пользователь с указанным именем пользователя уже существует."
+            )
+
     async def create(self, data: CreateUserSchema):
-        # Можно еще почту и username приводить к одному регистру
-        # Проверка Что такая почта не используется
-        # Проверка Что такой username не используется
-
         await self.check_exist_email(data.email)
+        await self.check_exist_username(data.username)
 
-        # Создание хеша для пароля
+        password_manager = get_password_manager()
+        hashed_password = password_manager.generate_hash(data.password)
+
         user = User(
             username=data.username,
             email=data.email,
-            password=data.password,
+            password_hash=hashed_password,
         )
         profile = Profile(
             user_id=user.id,
@@ -39,7 +44,14 @@ class UserService(BaseUserService):
             phone_number=data.phone_number,
         )
 
-        await self.storage.create_user_and_profile(user=user, profile=profile)
+        try:
+            await self.storage.create_user_and_profile(
+                user=user, profile=profile
+            )
+        except Exception as e:
+            raise UserServiceException(
+                "Ошибка при создании пользователя"
+            ) from e
 
 
 @lru_cache()

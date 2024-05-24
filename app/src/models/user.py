@@ -1,13 +1,18 @@
+from datetime import datetime
+
 from bson import ObjectId
 from pydantic import EmailStr, Field
 
-from .base import BaseUUIDModel
+from .base import BaseUUIDModel, datetime_now
 
 
 class User(BaseUUIDModel):
     username: str = Field(min_length=3, max_length=50, example="user123")
-    password: str = Field(min_length=8, example="securepassword123")
+    password_hash: str
     email: EmailStr = Field(example="user@example.com")
+    is_active: bool = False
+    updated_at: datetime = Field(default_factory=datetime_now)
+    created_at: datetime = Field(default_factory=datetime_now)
 
 
 class Profile(BaseUUIDModel):
@@ -18,3 +23,5 @@ class Profile(BaseUUIDModel):
         min_length=10, max_length=15, example="+79990000000"
     )
     user_id: ObjectId
+    updated_at: datetime = Field(default_factory=datetime_now)
+    created_at: datetime = Field(default_factory=datetime_now)

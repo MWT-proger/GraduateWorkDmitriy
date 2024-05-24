@@ -21,8 +21,8 @@ async def create(
     data: CreateUserSchema,
     service: BaseUserService = Depends(get_user_service),
 ):
-    user = await service.create(data)
-    return user
+    await service.create(data)
+    return SuccessSchema(msg="Успешно. Необходимо подтвердить почту.")
 
 
 @router.post(

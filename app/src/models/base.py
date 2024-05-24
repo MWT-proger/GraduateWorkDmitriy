@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -9,3 +11,7 @@ class BaseUUIDModel(BaseModel):
         populate_by_name=True,
         arbitrary_types_allowed=True,
     )
+
+
+def datetime_now() -> datetime:
+    return datetime.now(timezone.utc)

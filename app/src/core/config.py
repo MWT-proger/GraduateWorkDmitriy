@@ -27,6 +27,7 @@ class MongoDB(BaseSettings):
 
 
 class Settings(BaseSettings):
+    SECRET_KEY: str
     DEBUG: bool = False
     PROJECT_NAME: str = "app"
     PORT: str = "8000"
