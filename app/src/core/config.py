@@ -11,6 +11,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 class MongoCollections:
     USERS = "users"
     PROFILES = "profiles"
+    AUTH = "auth"
+
+
+class JWTConfig:
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 3
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
 
 class EmailConfig(BaseSettings):
@@ -47,6 +53,7 @@ class Settings(BaseSettings):
 
     MONGODB: MongoDB = MongoDB()
     EMAIL: EmailConfig = EmailConfig()
+    JWT: JWTConfig = JWTConfig()
 
 
 settings = Settings()

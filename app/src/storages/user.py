@@ -63,10 +63,16 @@ class UserStorageMongoDB(BaseUserStorage):
         user_doc = await self.collection.find_one({"email": email.lower()})
         return User(**user_doc) if user_doc else None
 
-    async def get_by_username(self, username: str) -> User:
-        user_doc = await self.collection.find_one(
-            {"username": username.lower()}
-        )
+    async def get_by_username(
+        self, username: str, is_active: bool = None
+    ) -> User:
+        query = {"username": username.lower()}
+
+        if is_active:
+            query["is_active"] = True
+
+        user_doc = await self.collection.find_one(filter=query)
+
         return User(**user_doc) if user_doc else None
 
     async def get_by_id(self, user_id: str) -> User:

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from models import Profile, User
+from models.auth import Auth
 
 
 class BaseStorage(ABC):
@@ -25,7 +26,7 @@ class BaseUserStorage(BaseStorage):
     ) -> User: ...
 
     @abstractmethod
-    async def get_by_username(self, username: str): ...
+    async def get_by_username(self, username: str) -> User: ...
 
     @abstractmethod
     async def get_by_id(self, user_id: str): ...
@@ -41,3 +42,14 @@ class BaseProfileStorage(BaseStorage):
 
     @abstractmethod
     async def create(self, profile: Profile, session=None): ...
+
+
+class BaseAuthStorage(BaseStorage):
+
+    @abstractmethod
+    async def create(self, auth: Auth): ...
+
+    @abstractmethod
+    async def upsert(
+        self, user_id: str, user_agent: str, new_refresh_token: str
+    ): ...

@@ -1,7 +1,6 @@
 from functools import lru_cache
 
 from fastapi import Depends
-from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from auth.password_manager import get_password_manager
 from core.utils import create_otp
@@ -9,7 +8,7 @@ from exceptions.user import UserServiceException
 from models import Profile, User
 from schemas import ConfirmEmailSchema, CreateUserSchema
 from services.email import get_email_service
-from storages import get_user_storage
+from storages import BaseUserStorage, get_user_storage
 
 from .base import BaseUserService
 
@@ -75,6 +74,6 @@ class UserService(BaseUserService):
 
 @lru_cache()
 def get_user_service(
-    storage: AsyncIOMotorDatabase = Depends(get_user_storage),
+    storage: BaseUserStorage = Depends(get_user_storage),
 ) -> UserService:
     return UserService(storage=storage)

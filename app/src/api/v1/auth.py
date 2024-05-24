@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 
 from auth.auth_bearer import JWTBearer
 from schemas import LoginSchema, SuccessSchema, TokenJWTSchema
-from services.base import BaseUserService
+from services.auth import get_auth_service
+from services.base import BaseAuthService, BaseUserService
 from services.user import get_user_service
 
 router = APIRouter(
@@ -14,10 +15,15 @@ router = APIRouter(
 
 @router.post("/login", response_model=TokenJWTSchema)
 async def login(
-    data: LoginSchema, service: BaseUserService = Depends(get_user_service)
+    data: LoginSchema,
+    request: Request,
+    service: BaseAuthService = Depends(get_auth_service),
 ):
-    user = service.login(data)
-    return user
+    user_agent = request.headers.get("user-agent")
+    access_token, refresh_token = await service.login(data, user_agent)
+    return TokenJWTSchema(
+        access_token=access_token, refresh_token=refresh_token
+    )
 
 
 @router.post(
@@ -35,5 +41,7 @@ async def logout(service: BaseUserService = Depends(get_user_service)):
     response_model=TokenJWTSchema,
 )
 async def refresh(service: BaseUserService = Depends(get_user_service)):
-    user = service.refresh()
-    return user
+    access_token, refresh_token = await service.refresh()
+    return TokenJWTSchema(
+        access_token=access_token, refresh_token=refresh_token
+    )

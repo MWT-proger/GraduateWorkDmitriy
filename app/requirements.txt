@@ -4,3 +4,4 @@ pydantic-settings==2.2.1
 motor==3.4.0
 cryptography==42.0.7
 aiosmtplib==3.0.1
+pyjwt==2.8.0
