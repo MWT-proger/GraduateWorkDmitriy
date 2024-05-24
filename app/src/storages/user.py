@@ -21,11 +21,10 @@ class UserStorageMongoDB(BaseUserStorage):
 
     async def create_user_and_profile(self, user: User, profile: Profile):
         
-        # async with await self.db.client.start_session() as session:
-        #     async with session.start_transaction():
-        session = None
-        await self.collection.insert_one(user.model_dump(), session=session)
-        await self.profile_storage.create(profile=profile, session=session)
+        async with await self.db.client.start_session() as session:
+            async with session.start_transaction():
+                await self.collection.insert_one(user.model_dump(), session=session)
+                await self.profile_storage.create(profile=profile, session=session)
 
 
 @lru_cache()

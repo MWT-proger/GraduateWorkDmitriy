@@ -3,17 +3,27 @@ version: '3.8'
 services:
 
   mongodb:
-    image: mongodb/mongodb-community-server:7.0.6-ubi8
-    container_name: mongodb
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-    ports:
-      - "${MONGO_INITDB_PORT}:27017"
-    volumes:
-      - "data_db:/data/db:rw"
+        image: mongo:7.0.6
+        container_name: mongodb
+        restart: always
+        environment:
+          MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+          MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+          MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+          MONGO_REPLICA_SET_NAME: rs0
+        volumes:
+            - "data_db:/data/db:rw"
+            - ./mongodb/keys/:/opt/keyfile/
+        ports:
+            - "${MONGO_INITDB_PORT}:27017"
+        entrypoint:
+            - bash
+            - -c
+            - |
+                chmod 400 /opt/keyfile/keyfile
+                chown 999:999 /opt/keyfile/keyfile
+                exec docker-entrypoint.sh $$@
+        command: "mongod --bind_ip_all --keyFile /opt/keyfile/keyfile --replSet rs0"
 
   app:
     container_name: app

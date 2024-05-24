@@ -160,4 +160,5 @@ cython_debug/
 .idea/
 
 docs/bruno
-temp/docker-compose.yaml
+temp/*
+deployments/mongodb/keys/keyfile
