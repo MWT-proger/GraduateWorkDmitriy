@@ -1,5 +1,6 @@
 from .auth import LoginSchema, TokenJWTSchema
 from .base import SuccessSchema
+from .forecast import TrainTestDataSchema
 from .user import (
     ChangePasswordUserSchema,
     ConfirmEmailSchema,
@@ -7,6 +8,7 @@ from .user import (
 )
 
 __all__ = [
+    "TrainTestDataSchema",
     "SuccessSchema",
     "LoginSchema",
     "TokenJWTSchema",

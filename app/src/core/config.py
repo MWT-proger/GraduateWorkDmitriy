@@ -12,6 +12,7 @@ class MongoCollections:
     USERS = "users"
     PROFILES = "profiles"
     AUTH = "auth"
+    FORECAST = "forecast"
 
 
 class JWTConfig:

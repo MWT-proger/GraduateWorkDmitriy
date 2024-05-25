@@ -162,3 +162,5 @@ cython_debug/
 docs/bruno
 temp/*
 deployments/mongodb/keys/keyfile
+app/src/data/DefaultForecaster/config.json
+app/src/data/DefaultForecaster/model.pkl

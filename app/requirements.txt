@@ -5,3 +5,4 @@ motor==3.4.0
 cryptography==42.0.7
 aiosmtplib==3.0.1
 pyjwt==2.8.0
+salesforce-merlion[dashboard]==2.0.2

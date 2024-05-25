@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from schemas import ConfirmEmailSchema, CreateUserSchema, LoginSchema
+from schemas.forecast import ResultForecastSchema, TrainTestDataSchema
 from schemas.user import ChangePasswordUserSchema
 from storages import BaseUserStorage
 from storages.base import BaseAuthStorage
@@ -46,3 +47,11 @@ class BaseAuthService(BaseService):
 
     @abstractmethod
     async def refresh(self, user_agent: str, refresh: str): ...
+
+
+class BaseForecastService(ABC):
+
+    @abstractmethod
+    async def get_train_test_result(
+        self, data: TrainTestDataSchema, user_id: str
+    ) -> ResultForecastSchema: ...

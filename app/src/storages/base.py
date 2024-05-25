@@ -59,3 +59,9 @@ class BaseAuthStorage(BaseStorage):
     async def get_by_user_id_and_user_agent(
         self, user_id: str, user_agent: str
     ) -> Optional[Auth]: ...
+
+
+class BaseForecastStorage(BaseStorage):
+
+    @abstractmethod
+    async def save_result(self, result_data: dict): ...
