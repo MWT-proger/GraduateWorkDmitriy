@@ -13,6 +13,11 @@ class MongoCollections:
     PROFILES = "profiles"
     AUTH = "auth"
     FORECAST = "forecast"
+    DATASET = "dataset"
+
+
+class FileStorage:
+    PATH: str = os.path.dirname(BASE_DIR) + "/src/file_storage"
 
 
 class JWTConfig:
@@ -55,6 +60,7 @@ class Settings(BaseSettings):
     MONGODB: MongoDB = MongoDB()
     EMAIL: EmailConfig = EmailConfig()
     JWT: JWTConfig = JWTConfig()
+    FILE_STORAGE: FileStorage = FileStorage()
 
 
 settings = Settings()

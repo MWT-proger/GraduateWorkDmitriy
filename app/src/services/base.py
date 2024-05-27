@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
+from typing import List
 
+from models.dataset import Dataset
 from schemas import ConfirmEmailSchema, CreateUserSchema, LoginSchema
 from schemas.forecast import ResultForecastSchema, TrainTestDataSchema
 from schemas.user import ChangePasswordUserSchema
-from storages import BaseUserStorage
-from storages.base import BaseAuthStorage
+from storages import BaseAuthStorage, BaseDatasetStorage, BaseUserStorage
 
 
 class BaseService(ABC):
@@ -55,3 +56,15 @@ class BaseForecastService(ABC):
     async def get_train_test_result(
         self, data: TrainTestDataSchema, user_id: str
     ) -> ResultForecastSchema: ...
+
+
+class BaseDatasetService(ABC):
+
+    def __init__(self, storage: BaseDatasetStorage) -> None:
+        self.storage = storage
+
+    @abstractmethod
+    async def save_dataset(self, dataset_file, user_id: str) -> Dataset: ...
+
+    @abstractmethod
+    async def get_user_datasets(self, user_id: str) -> List[Dataset]: ...

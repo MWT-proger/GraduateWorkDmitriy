@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field
 
+from models.base import PydanticObjectId
+
 
 class TokenJWTSchema(BaseModel):
     access_token: str
@@ -7,7 +9,7 @@ class TokenJWTSchema(BaseModel):
 
 
 class AuthJWTSchema(BaseModel):
-    user_id: str
+    user_id: PydanticObjectId
     token: str
 
 

@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import List, Optional
 
 from models import Profile, User
 from models.auth import Auth
+from models.dataset import Dataset
 
 
 class BaseStorage(ABC):
@@ -65,3 +66,14 @@ class BaseForecastStorage(BaseStorage):
 
     @abstractmethod
     async def save_result(self, result_data: dict): ...
+
+
+class BaseDatasetStorage(BaseStorage):
+
+    @abstractmethod
+    async def create_document(self, document: Dataset): ...
+
+    @abstractmethod
+    async def get_documents_by_user(
+        self, user_id: str, length: int = 100
+    ) -> List[Dataset]: ...

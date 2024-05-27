@@ -1,13 +1,13 @@
 from functools import lru_cache
 from typing import Optional
 
-from bson import ObjectId
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from core.config import settings
 from db.mongodb import get_db
 from models.auth import Auth
+from models.base import PydanticObjectId
 from storages.user import get_user_storage
 
 from .base import BaseAuthStorage, BaseUserStorage
@@ -47,7 +47,7 @@ class AuthStorageMongoDB(BaseAuthStorage):
         return Auth(**auth_doc) if auth_doc else None
 
     async def delete_by_id(self, obj_id: str):
-        await self.collection.delete_one({"_id": ObjectId(obj_id)})
+        await self.collection.delete_one({"_id": PydanticObjectId(obj_id)})
 
     async def get_by_refresh_token_and_user_agent(
         self, refresh_token: str, user_agent: str

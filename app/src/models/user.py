@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from bson import ObjectId
 from pydantic import EmailStr, Field
 
-from .base import BaseUUIDModel, datetime_now
+from .base import BaseUUIDModel, PydanticObjectId, datetime_now
 
 
 class User(BaseUUIDModel):
@@ -23,6 +22,6 @@ class Profile(BaseUUIDModel):
     phone_number: str = Field(
         min_length=10, max_length=15, example="+79990000000"
     )
-    user_id: ObjectId
+    user_id: PydanticObjectId
     updated_at: datetime = Field(default_factory=datetime_now)
     created_at: datetime = Field(default_factory=datetime_now)

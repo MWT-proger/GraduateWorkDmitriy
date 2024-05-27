@@ -2,6 +2,8 @@ from typing import Any, List, Optional
 
 from pydantic import BaseModel, Field
 
+from models.base import PydanticObjectId
+
 
 class ParamsAlgorithmSchema(BaseModel):
     parametr: str = Field(example="max_forecast_steps")
@@ -9,7 +11,7 @@ class ParamsAlgorithmSchema(BaseModel):
 
 
 class TrainTestDataSchema(BaseModel):
-    file_id: str
+    file_id: PydanticObjectId
     target_col: str = Field(example="temp_max")
     algorithm: str = Field(example="DefaultForecaster")
     algorithm_params: List[ParamsAlgorithmSchema] = Field
