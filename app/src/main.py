@@ -3,12 +3,13 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
+from fastapi.exceptions import HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from api import v1 as api_v1
 from core.config import settings
 from db import mongodb
-from exceptions.exception_handlers import service_exception_handler
+from exceptions.exception_handlers import service_exception_handler, http_exception_handler, error_exception_handler
 from exceptions.user import ServiceException
 
 
@@ -29,6 +30,8 @@ app = FastAPI(
 
 app.include_router(api_v1.router, prefix="/api/v1")
 app.exception_handler(ServiceException)(service_exception_handler)
+app.exception_handler(HTTPException)(http_exception_handler)
+app.exception_handler(Exception)(error_exception_handler)
 
 if __name__ == "__main__":
     uvicorn.run(
