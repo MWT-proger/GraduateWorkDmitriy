@@ -1,1 +1,816 @@
-{"openapi":"3.1.0","info":{"title":"GraduateWork","version":"0.1.0"},"paths":{"/api/v1/user":{"post":{"tags":["User"],"summary":"Create","operationId":"create_api_v1_user_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateUserSchema"}}},"required":true},"responses":{"201":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SuccessSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"delete":{"tags":["User"],"summary":"Remove","operationId":"remove_api_v1_user_delete","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SuccessSchema"}}}}},"security":[{"JWTBearer":[]}]}},"/api/v1/user/change_password":{"post":{"tags":["User"],"summary":"Change Password","operationId":"change_password_api_v1_user_change_password_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ChangePasswordUserSchema"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SuccessSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"JWTBearer":[]}]}},"/api/v1/user/confirm_email":{"post":{"tags":["User"],"summary":"Confirm Email","operationId":"confirm_email_api_v1_user_confirm_email_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ConfirmEmailSchema"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SuccessSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/auth/login":{"post":{"tags":["Auth"],"summary":"Login","operationId":"login_api_v1_auth_login_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/LoginSchema"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenJWTSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/auth/logout":{"post":{"tags":["Auth"],"summary":"Logout","operationId":"logout_api_v1_auth_logout_post","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SuccessSchema"}}}}},"security":[{"JWTBearer":[]}]}},"/api/v1/auth/refresh":{"post":{"tags":["Auth"],"summary":"Refresh","operationId":"refresh_api_v1_auth_refresh_post","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/TokenJWTSchema"}}}}},"security":[{"JWTRefreshBearer":[]}]}},"/api/v1/forecast/train-test":{"post":{"tags":["Forecast"],"summary":"Login","operationId":"login_api_v1_forecast_train_test_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/TrainTestDataSchema"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ResultForecastSchema"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"JWTBearer":[]}]}}},"components":{"schemas":{"ChangePasswordUserSchema":{"properties":{"current_password":{"type":"string","minLength":8,"title":"Current Password","example":"securepassword123"},"new_password":{"type":"string","minLength":8,"title":"New Password","example":"newsecurepassword123"},"confirm_new_password":{"type":"string","minLength":8,"title":"Confirm New Password","example":"newsecurepassword123"}},"type":"object","required":["current_password","new_password","confirm_new_password"],"title":"ChangePasswordUserSchema"},"ConfirmEmailSchema":{"properties":{"email":{"type":"string","format":"email","title":"Email"},"otp_code":{"type":"string","title":"Otp Code"}},"type":"object","required":["email","otp_code"],"title":"ConfirmEmailSchema"},"CreateUserSchema":{"properties":{"username":{"type":"string","maxLength":50,"minLength":3,"title":"Username","example":"user123"},"password":{"type":"string","minLength":8,"title":"Password","example":"securepassword123"},"email":{"type":"string","format":"email","title":"Email","example":"user@example.com"},"full_name":{"type":"string","maxLength":100,"minLength":3,"title":"Full Name","example":"Иванов Иван Иванович"},"phone_number":{"type":"string","maxLength":15,"minLength":10,"title":"Phone Number","example":"+79990000000"}},"type":"object","required":["username","password","email","full_name","phone_number"],"title":"CreateUserSchema","description":"TODO: В будущем можно проверять:\n- правильную форму номера телефона\n- пароль на простоту и т.д."},"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"LoginSchema":{"properties":{"username":{"type":"string","maxLength":50,"minLength":3,"title":"Username","example":"user123"},"password":{"type":"string","minLength":8,"title":"Password","example":"securepassword123"}},"type":"object","required":["username","password"],"title":"LoginSchema"},"MetricTable":{"properties":{"data":{"title":"Data"},"columns":{"title":"Columns"},"editable":{"type":"boolean","title":"Editable"},"style_table":{"type":"object","title":"Style Table"},"style_data":{"type":"object","title":"Style Data"},"style_header":{"type":"object","title":"Style Header"},"style_cell_conditional":{"title":"Style Cell Conditional"},"style_header_conditional":{"title":"Style Header Conditional"}},"type":"object","required":["data","columns","editable","style_table","style_data","style_header","style_cell_conditional","style_header_conditional"],"title":"MetricTable"},"ParamsAlgorithmSchema":{"properties":{"parametr":{"type":"string","title":"Parametr","example":"max_forecast_steps"},"value":{"type":"string","title":"Value","example":"None"}},"type":"object","required":["parametr","value"],"title":"ParamsAlgorithmSchema"},"ResultForecastSchema":{"properties":{"train_metric_table":{"anyOf":[{"$ref":"#/components/schemas/MetricTable"},{"type":"null"}]},"test_metric_table":{"anyOf":[{"$ref":"#/components/schemas/MetricTable"},{"type":"null"}]},"figure_json":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Figure Json"}},"type":"object","required":["train_metric_table","test_metric_table","figure_json"],"title":"ResultForecastSchema"},"SuccessSchema":{"properties":{"msg":{"type":"string","title":"Msg","example":"Операция прошла успешно"}},"type":"object","required":["msg"],"title":"SuccessSchema"},"TokenJWTSchema":{"properties":{"access_token":{"type":"string","title":"Access Token"},"refresh_token":{"type":"string","title":"Refresh Token"}},"type":"object","required":["access_token","refresh_token"],"title":"TokenJWTSchema"},"TrainTestDataSchema":{"properties":{"file_id":{"type":"string","title":"File Id"},"target_col":{"type":"string","title":"Target Col","example":"temp_max"},"algorithm":{"type":"string","title":"Algorithm","example":"DefaultForecaster"},"algorithm_params":{"items":{"$ref":"#/components/schemas/ParamsAlgorithmSchema"},"type":"array","title":"Algorithm Params"},"train_percentage":{"type":"integer","title":"Train Percentage","example":80},"file_mode":{"type":"string","title":"File Mode","default":"single"},"feature_cols":{"items":{"type":"string"},"type":"array","title":"Feature Cols"},"exog_cols":{"items":{"type":"string"},"type":"array","title":"Exog Cols"},"test_filename":{"type":"string","title":"Test Filename"}},"type":"object","required":["file_id","target_col","algorithm","train_percentage"],"title":"TrainTestDataSchema"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"}},"securitySchemes":{"JWTBearer":{"type":"http","scheme":"bearer"},"JWTRefreshBearer":{"type":"http","scheme":"bearer"}}}}
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "GraduateWork",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/api/v1/user": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create",
+                "operationId": "create_api_v1_user_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateUserSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Remove",
+                "operationId": "remove_api_v1_user_delete",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user/change_password": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Change Password",
+                "operationId": "change_password_api_v1_user_change_password_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangePasswordUserSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user/confirm_email": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Confirm Email",
+                "operationId": "confirm_email_api_v1_user_confirm_email_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ConfirmEmailSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "operationId": "login_api_v1_auth_login_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenJWTSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "operationId": "logout_api_v1_auth_logout_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh",
+                "operationId": "refresh_api_v1_auth_refresh_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenJWTSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTRefreshBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/forecast/train-test": {
+            "post": {
+                "tags": [
+                    "Forecast"
+                ],
+                "summary": "Login",
+                "operationId": "login_api_v1_forecast_train_test_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TrainTestDataSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultForecastSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/dataset/upload": {
+            "post": {
+                "tags": [
+                    "Dataset"
+                ],
+                "summary": "Upload Dataset",
+                "operationId": "upload_dataset_api_v1_dataset_upload_post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_upload_dataset_api_v1_dataset_upload_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DatasetSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/dataset/me": {
+            "get": {
+                "tags": [
+                    "Dataset"
+                ],
+                "summary": "Get User Datasets",
+                "operationId": "get_user_datasets_api_v1_dataset_me_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListDatasetsSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Body_upload_dataset_api_v1_dataset_upload_post": {
+                "properties": {
+                    "dataset": {
+                        "type": "string",
+                        "format": "binary",
+                        "title": "Dataset"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "dataset"
+                ],
+                "title": "Body_upload_dataset_api_v1_dataset_upload_post"
+            },
+            "ChangePasswordUserSchema": {
+                "properties": {
+                    "current_password": {
+                        "type": "string",
+                        "minLength": 8,
+                        "title": "Current Password",
+                        "example": "securepassword123"
+                    },
+                    "new_password": {
+                        "type": "string",
+                        "minLength": 8,
+                        "title": "New Password",
+                        "example": "newsecurepassword123"
+                    },
+                    "confirm_new_password": {
+                        "type": "string",
+                        "minLength": 8,
+                        "title": "Confirm New Password",
+                        "example": "newsecurepassword123"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "current_password",
+                    "new_password",
+                    "confirm_new_password"
+                ],
+                "title": "ChangePasswordUserSchema"
+            },
+            "ConfirmEmailSchema": {
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "otp_code": {
+                        "type": "string",
+                        "title": "Otp Code"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "email",
+                    "otp_code"
+                ],
+                "title": "ConfirmEmailSchema"
+            },
+            "CreateUserSchema": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 3,
+                        "title": "Username",
+                        "example": "user123"
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 8,
+                        "title": "Password",
+                        "example": "securepassword123"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email",
+                        "example": "user@example.com"
+                    },
+                    "full_name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 3,
+                        "title": "Full Name",
+                        "example": "Иванов Иван Иванович"
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "maxLength": 15,
+                        "minLength": 10,
+                        "title": "Phone Number",
+                        "example": "+79990000000"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "password",
+                    "email",
+                    "full_name",
+                    "phone_number"
+                ],
+                "title": "CreateUserSchema",
+                "description": "TODO: В будущем можно проверять:\n- правильную форму номера телефона\n- пароль на простоту и т.д."
+            },
+            "DatasetSchema": {
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "example": "665271bff4546cdc3faa2719"
+                    },
+                    "file_name": {
+                        "type": "string",
+                        "title": "File Name",
+                        "example": "example.csv"
+                    },
+                    "columns": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Columns",
+                        "example": [
+                            "date",
+                            "max",
+                            "min"
+                        ]
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Created At"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "file_name",
+                    "columns",
+                    "created_at"
+                ],
+                "title": "DatasetSchema"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "ListDatasetsSchema": {
+                "properties": {
+                    "data": {
+                        "items": {
+                            "$ref": "#/components/schemas/DatasetSchema"
+                        },
+                        "type": "array",
+                        "title": "Data"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "title": "ListDatasetsSchema"
+            },
+            "LoginSchema": {
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 3,
+                        "title": "Username",
+                        "example": "user123"
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 8,
+                        "title": "Password",
+                        "example": "securepassword123"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "username",
+                    "password"
+                ],
+                "title": "LoginSchema"
+            },
+            "MetricTable": {
+                "properties": {
+                    "data": {
+                        "title": "Data"
+                    },
+                    "columns": {
+                        "title": "Columns"
+                    },
+                    "editable": {
+                        "type": "boolean",
+                        "title": "Editable"
+                    },
+                    "style_table": {
+                        "type": "object",
+                        "title": "Style Table"
+                    },
+                    "style_data": {
+                        "type": "object",
+                        "title": "Style Data"
+                    },
+                    "style_header": {
+                        "type": "object",
+                        "title": "Style Header"
+                    },
+                    "style_cell_conditional": {
+                        "title": "Style Cell Conditional"
+                    },
+                    "style_header_conditional": {
+                        "title": "Style Header Conditional"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "data",
+                    "columns",
+                    "editable",
+                    "style_table",
+                    "style_data",
+                    "style_header",
+                    "style_cell_conditional",
+                    "style_header_conditional"
+                ],
+                "title": "MetricTable"
+            },
+            "ParamsAlgorithmSchema": {
+                "properties": {
+                    "parametr": {
+                        "type": "string",
+                        "title": "Parametr",
+                        "example": "max_forecast_steps"
+                    },
+                    "value": {
+                        "type": "string",
+                        "title": "Value",
+                        "example": "None"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "parametr",
+                    "value"
+                ],
+                "title": "ParamsAlgorithmSchema"
+            },
+            "ResultForecastSchema": {
+                "properties": {
+                    "train_metric_table": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/MetricTable"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "test_metric_table": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/MetricTable"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "figure_json": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Figure Json"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "train_metric_table",
+                    "test_metric_table",
+                    "figure_json"
+                ],
+                "title": "ResultForecastSchema"
+            },
+            "SuccessSchema": {
+                "properties": {
+                    "msg": {
+                        "type": "string",
+                        "title": "Msg",
+                        "example": "Операция прошла успешно"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "msg"
+                ],
+                "title": "SuccessSchema"
+            },
+            "TokenJWTSchema": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    },
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "access_token",
+                    "refresh_token"
+                ],
+                "title": "TokenJWTSchema"
+            },
+            "TrainTestDataSchema": {
+                "properties": {
+                    "file_id": {
+                        "title": "File Id"
+                    },
+                    "target_col": {
+                        "type": "string",
+                        "title": "Target Col",
+                        "example": "temp_max"
+                    },
+                    "algorithm": {
+                        "type": "string",
+                        "title": "Algorithm",
+                        "example": "DefaultForecaster"
+                    },
+                    "algorithm_params": {
+                        "items": {
+                            "$ref": "#/components/schemas/ParamsAlgorithmSchema"
+                        },
+                        "type": "array",
+                        "title": "Algorithm Params"
+                    },
+                    "train_percentage": {
+                        "type": "integer",
+                        "title": "Train Percentage",
+                        "example": 80
+                    },
+                    "file_mode": {
+                        "type": "string",
+                        "title": "File Mode",
+                        "default": "single"
+                    },
+                    "feature_cols": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Feature Cols"
+                    },
+                    "exog_cols": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Exog Cols"
+                    },
+                    "test_filename": {
+                        "type": "string",
+                        "title": "Test Filename"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "file_id",
+                    "target_col",
+                    "algorithm",
+                    "train_percentage"
+                ],
+                "title": "TrainTestDataSchema"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "JWTBearer": {
+                "type": "http",
+                "scheme": "bearer"
+            },
+            "JWTRefreshBearer": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
