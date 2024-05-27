@@ -1,6 +1,6 @@
 import os
 from functools import lru_cache
-from typing import List
+from typing import AsyncGenerator
 
 from fastapi import Depends
 from pandas import read_csv
@@ -39,8 +39,10 @@ class DatasetService(BaseDatasetService):
 
         return new_dataset
 
-    async def get_user_datasets(self, user_id: str) -> List[Dataset]:
-        return await self.storage.get_documents_by_user(user_id=user_id)
+    async def get_user_datasets(
+        self, user_id: str
+    ) -> AsyncGenerator[Dataset, None]:
+        return self.storage.get_documents_by_user(user_id=user_id)
 
     def validate_file_extension(self, file: DatasetFile):
         if not file.filename.endswith(".csv"):

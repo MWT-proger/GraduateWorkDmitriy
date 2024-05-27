@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import List
+from typing import AsyncGenerator
 
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
@@ -26,11 +26,12 @@ class DatasetStorageMongoDB(BaseDatasetStorage):
 
     async def get_documents_by_user(
         self, user_id: str, length: int = 100
-    ) -> List[Dataset]:
+    ) -> AsyncGenerator[Dataset, None]:
         documents = await self.collection.find({"user_id": user_id}).to_list(
             length
         )
-        return [Dataset(**doc) for doc in documents]
+        for doc in documents:
+            yield Dataset(**doc)
 
 
 @lru_cache()

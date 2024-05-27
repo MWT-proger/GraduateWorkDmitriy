@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import AsyncGenerator, Optional
 
 from models import Profile, User
 from models.auth import Auth
@@ -76,4 +76,4 @@ class BaseDatasetStorage(BaseStorage):
     @abstractmethod
     async def get_documents_by_user(
         self, user_id: str, length: int = 100
-    ) -> List[Dataset]: ...
+    ) -> AsyncGenerator[Dataset, None]: ...

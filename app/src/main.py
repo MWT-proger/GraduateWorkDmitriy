@@ -2,14 +2,18 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
 from fastapi.exceptions import HTTPException
+from fastapi.responses import ORJSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from api import v1 as api_v1
 from core.config import settings
 from db import mongodb
-from exceptions.exception_handlers import service_exception_handler, http_exception_handler, error_exception_handler
+from exceptions.exception_handlers import (
+    error_exception_handler,
+    http_exception_handler,
+    service_exception_handler,
+)
 from exceptions.user import ServiceException
 
 

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import AsyncGenerator
 
 from models.dataset import Dataset
 from schemas import ConfirmEmailSchema, CreateUserSchema, LoginSchema
@@ -67,4 +67,6 @@ class BaseDatasetService(ABC):
     async def save_dataset(self, dataset_file, user_id: str) -> Dataset: ...
 
     @abstractmethod
-    async def get_user_datasets(self, user_id: str) -> List[Dataset]: ...
+    async def get_user_datasets(
+        self, user_id: str
+    ) -> AsyncGenerator[Dataset, None]: ...

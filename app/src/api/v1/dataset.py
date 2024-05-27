@@ -34,14 +34,15 @@ async def get_user_datasets(
     auth_data: AuthJWTSchema = Depends(JWTBearer()),
     service: BaseDatasetService = Depends(get_dataset_service),
 ):
-    data = await service.get_user_datasets(user_id=auth_data.user_id)
-    data = [
-        DatasetSchema(
-            id=str(obj.id),
-            file_name=obj.file_name,
-            columns=obj.columns,
-            created_at=obj.created_at,
+    result = await service.get_user_datasets(user_id=auth_data.user_id)
+    data = []
+    async for obj in result:
+        data.append(
+            DatasetSchema(
+                id=str(obj.id),
+                file_name=obj.file_name,
+                columns=obj.columns,
+                created_at=obj.created_at,
+            )
         )
-        for obj in data
-    ]
     return ListDatasetsSchema(data=data)
