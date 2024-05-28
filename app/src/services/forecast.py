@@ -81,7 +81,6 @@ class ForecastService(BaseForecastService):
             result_in_db.exog_ts = serializer_timeseries_to_pydantic(exog_ts)
 
         finally:
-            print("@ Я ТУТ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
             await self.storage.save_result(data=result_in_db)
 
         return result_in_db
