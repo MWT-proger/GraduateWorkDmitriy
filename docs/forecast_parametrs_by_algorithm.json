@@ -1,0 +1,342 @@
+{
+    "DefaultForecaster": {
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "granularity": {
+            "type": "str",
+            "default": null
+        }
+    },
+    "Arima": {
+        "order": {
+            "type": "tuple",
+            "default": [
+                4,
+                1,
+                2
+            ]
+        },
+        "seasonal_order": {
+            "type": "tuple",
+            "default": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        },
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        }
+    },
+    "LGBMForecaster": {
+        "learning_rate": {
+            "type": "float",
+            "default": 0.1
+        },
+        "n_jobs": {
+            "type": "int",
+            "default": -1
+        },
+        "n_estimators": {
+            "type": "int",
+            "default": 100
+        },
+        "max_depth": {
+            "type": "int",
+            "default": null
+        },
+        "random_state": {
+            "type": "int",
+            "default": null
+        },
+        "maxlags": {
+            "type": "int",
+            "default": null
+        },
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "prediction_stride": {
+            "type": "int",
+            "default": 1
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        }
+    },
+    "ETS": {
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "error": {
+            "type": "str",
+            "default": "add"
+        },
+        "trend": {
+            "type": "str",
+            "default": "add"
+        },
+        "damped_trend": {
+            "type": "bool",
+            "default": true
+        },
+        "seasonal": {
+            "type": "str",
+            "default": "add"
+        },
+        "seasonal_periods": {
+            "type": "int",
+            "default": null
+        },
+        "refit": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "AutoETS": {
+        "auto_seasonality": {
+            "type": "bool",
+            "default": true
+        },
+        "auto_error": {
+            "type": "bool",
+            "default": true
+        },
+        "auto_trend": {
+            "type": "bool",
+            "default": true
+        },
+        "auto_seasonal": {
+            "type": "bool",
+            "default": true
+        },
+        "auto_damped": {
+            "type": "bool",
+            "default": true
+        },
+        "periodicity_strategy": {
+            "type": "enum",
+            "default": "ACF"
+        },
+        "information_criterion": {
+            "type": "enum",
+            "default": "AIC"
+        },
+        "additive_only": {
+            "type": "bool",
+            "default": false
+        },
+        "allow_multiplicative_trend": {
+            "type": "bool",
+            "default": false
+        },
+        "restrict": {
+            "type": "bool",
+            "default": true
+        },
+        "pval": {
+            "type": "float",
+            "default": 0.05
+        },
+        "max_lag": {
+            "type": "int",
+            "default": null
+        }
+    },
+    "Prophet": {
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "yearly_seasonality": {
+            "type": "str",
+            "default": "auto"
+        },
+        "weekly_seasonality": {
+            "type": "str",
+            "default": "auto"
+        },
+        "daily_seasonality": {
+            "type": "str",
+            "default": "auto"
+        },
+        "seasonality_mode": {
+            "type": "str",
+            "default": "additive"
+        },
+        "uncertainty_samples": {
+            "type": "int",
+            "default": 100
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        }
+    },
+    "AutoProphet": {
+        "periodicity_strategy": {
+            "type": "enum",
+            "default": "All"
+        },
+        "information_criterion": {
+            "type": "enum",
+            "default": "AIC"
+        },
+        "pval": {
+            "type": "float",
+            "default": 0.05
+        },
+        "max_lag": {
+            "type": "int",
+            "default": null
+        }
+    },
+    "Sarima": {
+        "order": {
+            "type": "tuple",
+            "default": [
+                4,
+                1,
+                2
+            ]
+        },
+        "seasonal_order": {
+            "type": "tuple",
+            "default": [
+                2,
+                0,
+                1,
+                24
+            ]
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        },
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        }
+    },
+    "VectorAR": {
+        "maxlags": {
+            "type": "int",
+            "default": null
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        },
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        }
+    },
+    "RandomForestForecaster": {
+        "min_samples_split": {
+            "type": "int",
+            "default": 2
+        },
+        "n_estimators": {
+            "type": "int",
+            "default": 100
+        },
+        "max_depth": {
+            "type": "int",
+            "default": null
+        },
+        "random_state": {
+            "type": "int",
+            "default": null
+        },
+        "maxlags": {
+            "type": "int",
+            "default": null
+        },
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "prediction_stride": {
+            "type": "int",
+            "default": 1
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        }
+    },
+    "ExtraTreesForecaster": {
+        "min_samples_split": {
+            "type": "int",
+            "default": 2
+        },
+        "n_estimators": {
+            "type": "int",
+            "default": 100
+        },
+        "max_depth": {
+            "type": "int",
+            "default": null
+        },
+        "random_state": {
+            "type": "int",
+            "default": null
+        },
+        "maxlags": {
+            "type": "int",
+            "default": null
+        },
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "prediction_stride": {
+            "type": "int",
+            "default": 1
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        }
+    }
+}

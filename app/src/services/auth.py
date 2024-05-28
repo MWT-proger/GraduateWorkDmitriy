@@ -63,6 +63,7 @@ class AuthService(BaseAuthService):
 
         if auth:
             await self.storage.delete_by_id(obj_id=auth.id)
+        # TODO: В дальнейшем
         print("Отзываем Access", access)
 
     async def refresh(self, user_agent: str, refresh: str):
