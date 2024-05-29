@@ -1,4 +1,4 @@
-from fastapi import Request
+from fastapi import Request, WebSocket
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from exceptions.auth import AuthJWTException
@@ -64,3 +64,17 @@ class JWTRefreshBearer(HTTPBearer):
             raise AuthJWTException(
                 status_code=403, msg="Invalid authorization code."
             )
+
+
+async def get_current_user_from_ws(websocket: WebSocket):
+    token = websocket.query_params.get("token")
+    if not token:
+        raise AuthJWTException(status_code=403, msg="Missing token")
+    service = get_auth_service()
+    user_id = service.get_user_id_from_jwt(token)
+    if not user_id:
+        await websocket.close(code=1008)  # 1008 indicates a policy violation
+        raise AuthJWTException(
+            status_code=403, msg="Invalid token or expired token"
+        )
+    return AuthJWTSchema(user_id=user_id, token=token)

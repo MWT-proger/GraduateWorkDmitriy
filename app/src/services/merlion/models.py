@@ -4,16 +4,20 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 #
+import asyncio
+
 import pandas as pd
 from merlion.dashboard.models.forecast import ForecastModel as _ForecastModel
 from merlion.evaluate.forecast import ForecastEvaluator
 from merlion.models.factory import ModelFactory
 from merlion.utils.time_series import TimeSeries
 
+from schemas.forecast import ForecastProgressEnum
+
 
 class ForecastModel(_ForecastModel):
 
-    def train(
+    async def train(
         self,
         algorithm,
         train_df,
@@ -22,6 +26,7 @@ class ForecastModel(_ForecastModel):
         feature_columns,
         exog_columns,
         params,
+        set_progress,
     ):
         if target_column not in train_df:
             target_column = int(target_column)
@@ -54,7 +59,8 @@ class ForecastModel(_ForecastModel):
         params["target_seq_index"] = columns.index(target_column)
         model_class = ModelFactory.get_model_class(algorithm)
         model = model_class(model_class.config_class(**params))
-
+        await set_progress(ForecastProgressEnum.model_initialized)
+        await asyncio.sleep(0.01)
         # Handle exogenous regressors if they are supported by the model
         if model.supports_exog and len(exog_columns) > 0:
             exog_ts = TimeSeries.from_pd(
@@ -71,19 +77,24 @@ class ForecastModel(_ForecastModel):
             exog_ts = None
 
         self.logger.info(f"Training the forecasting model: {algorithm}...")
+        await set_progress(ForecastProgressEnum.training_started)
+        await asyncio.sleep(0.01)
         train_ts = TimeSeries.from_pd(train_df)
         predictions = model.train(train_ts, exog_data=exog_ts)
         if isinstance(predictions, tuple):
             predictions = predictions[0]
 
         self.logger.info("Computing training performance metrics...")
+        await set_progress(ForecastProgressEnum.training_completed)
+        await asyncio.sleep(0.01)
         evaluator = ForecastEvaluator(
             model, config=ForecastEvaluator.config_class()
         )
         train_metrics = ForecastModel._compute_metrics(
             evaluator, train_ts, predictions
         )
-
+        await set_progress(ForecastProgressEnum.train_metrics_computed)
+        await asyncio.sleep(0.01)
         test_ts = TimeSeries.from_pd(test_df)
         if (
             "max_forecast_steps" in params
@@ -99,6 +110,15 @@ class ForecastModel(_ForecastModel):
         test_metrics = ForecastModel._compute_metrics(
             evaluator, test_ts, test_pred
         )
-
+        await set_progress(ForecastProgressEnum.test_metrics_computed)
+        await asyncio.sleep(0.01)
         self.logger.info("Finished.")
-        return model, train_metrics, test_metrics, test_ts, train_ts, exog_ts
+        return (
+            model,
+            train_metrics,
+            test_metrics,
+            test_ts,
+            train_ts,
+            exog_ts,
+            test_pred,
+        )

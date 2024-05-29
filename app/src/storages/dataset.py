@@ -1,11 +1,13 @@
 from functools import lru_cache
 from typing import AsyncGenerator
 
+from bson import ObjectId
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from core.config import settings
 from db.mongodb import get_db
+from models.base import PydanticObjectId
 from models.dataset import Dataset
 
 from .base import BaseDatasetStorage
@@ -32,6 +34,12 @@ class DatasetStorageMongoDB(BaseDatasetStorage):
         )
         for doc in documents:
             yield Dataset(**doc)
+
+    async def get_document_by_user_and_id(
+        self, user_id: str, doc_id: PydanticObjectId
+    ) -> Dataset:
+        user_doc = await self.collection.find_one({"_id": ObjectId(doc_id)})
+        return Dataset(**user_doc) if user_doc else None
 
 
 @lru_cache()

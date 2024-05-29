@@ -3,7 +3,13 @@ from enum import Enum
 from typing import Any, List, Optional
 
 from merlion.dashboard.models.forecast import ForecastModel
-from pydantic import BaseModel, Field, ValidationError, model_validator
+from pydantic import (
+    BaseModel,
+    Field,
+    ValidationError,
+    field_serializer,
+    model_validator,
+)
 from pydantic_core import InitErrorDetails, PydanticCustomError
 from typing_extensions import Self
 
@@ -103,8 +109,9 @@ class TimeseriesSchema(BaseModel):
 
 
 class StatusForecastEnum(str, Enum):
-    success = "успешно"
-    error = "ошибка"
+    process = "in_process"
+    success = "success"
+    error = "error"
 
 
 class ResultForecastSchema(BaseModel):
@@ -115,3 +122,53 @@ class ResultForecastSchema(BaseModel):
     test_ts: Optional[TimeseriesSchema] = None
     train_ts: Optional[TimeseriesSchema] = None
     exog_ts: Optional[TimeseriesSchema] = None
+
+
+class ForecastProgressEnum(Enum):
+    start = ("Запрос получен.", 5)
+    file_exist = (
+        "Файл с датасетом найден. Запускается процесс прогнозирования.",
+        10,
+    )
+    data_loaded = ("Данные из файла загружены.", 20)
+    model_initialized = ("Модель инициализирована.", 25)
+    training_started = ("Обучение модели началось.", 30)
+    training_completed = ("Обучение модели завершено.", 70)
+    train_metrics_computed = ("Обучающие метрики вычислены.", 75)
+    test_metrics_computed = ("Тестовые метрики вычислены.", 80)
+    save_model_train = ("Происходит сохранение модели.", 85)
+    full_process_success = (
+        "Процесс прогнозирование успешно произведен. Идет сохранение в БД.",
+        90,
+    )
+    save_to_db_success = (
+        "Сохранение в БД успешно произведено. Ждите результат.",
+        95,
+    )
+    finish = ("Завершено", 100)
+
+    def __init__(self, stage, percent):
+        self.stage = stage
+        self.percent = percent
+
+
+class ResultWebSocketForecastDataSchema(BaseModel):
+    train_metrics: Optional[dict[str, Any]] = None
+    test_metrics: Optional[dict[str, Any]] = None
+    test_ts: Optional[TimeseriesSchema] = None
+    train_ts: Optional[TimeseriesSchema] = None
+    exog_ts: Optional[TimeseriesSchema] = None
+
+
+class ResultWebSocketForecastSchema(BaseModel):
+    status: StatusForecastEnum = StatusForecastEnum.success
+    progress: Optional[ForecastProgressEnum] = None
+
+    message: Optional[str] = None
+    data: Optional[ResultWebSocketForecastDataSchema] = None
+
+    @field_serializer("progress")
+    def serialize_progress(self, value: ForecastProgressEnum, _info):
+        if value is None:
+            return None
+        return {"percent": value.percent, "stage": value.stage}

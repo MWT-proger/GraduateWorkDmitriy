@@ -83,3 +83,8 @@ class BaseDatasetStorage(BaseStorage):
     async def get_documents_by_user(
         self, user_id: str, length: int = 100
     ) -> AsyncGenerator[Dataset, None]: ...
+
+    @abstractmethod
+    async def get_document_by_user_and_id(
+        self, user_id: str, doc_id: str
+    ) -> Dataset: ...

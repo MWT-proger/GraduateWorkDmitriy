@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import AsyncGenerator, List
+from typing import Any, AsyncGenerator, List
 
 from models.dataset import Dataset
 from models.forecast import ResultForecastModel
@@ -7,6 +7,7 @@ from schemas import ConfirmEmailSchema, CreateUserSchema, LoginSchema
 from schemas.forecast import TrainTestDataSchema
 from schemas.user import ChangePasswordUserSchema
 from storages import BaseAuthStorage, BaseDatasetStorage, BaseUserStorage
+from storages.base import BaseForecastStorage
 
 
 class BaseService(ABC):
@@ -53,9 +54,15 @@ class BaseAuthService(BaseService):
 
 class BaseForecastService(ABC):
 
+    def __init__(
+        self, storage: BaseForecastStorage, dataset_storage: BaseDatasetStorage
+    ) -> None:
+        self.storage = storage
+        self.dataset_storage = dataset_storage
+
     @abstractmethod
     async def get_train_test_result(
-        self, data: TrainTestDataSchema, user_id: str
+        self, data: TrainTestDataSchema, user_id: str, set_progress: Any
     ) -> ResultForecastModel: ...
 
     @abstractmethod

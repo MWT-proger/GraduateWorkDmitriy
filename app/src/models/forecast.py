@@ -10,8 +10,9 @@ from .base import BaseUUIDModel, PydanticObjectId, datetime_now
 
 
 class StatusForecastEnum(str, Enum):
-    success = "успешно"
-    error = "ошибка"
+    process = "in_process"
+    success = "success"
+    error = "error"
 
 
 class ResultForecastModel(BaseUUIDModel):
@@ -26,5 +27,6 @@ class ResultForecastModel(BaseUUIDModel):
     test_ts: Optional[TimeseriesSchema] = None
     train_ts: Optional[TimeseriesSchema] = None
     exog_ts: Optional[TimeseriesSchema] = None
+    test_pred: Optional[TimeseriesSchema] = None
 
     created_at: datetime = Field(default_factory=datetime_now)

@@ -1,13 +1,13 @@
 from datetime import datetime
 from functools import lru_cache
 
+from bson import ObjectId
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from core.config import settings
 from db.mongodb import get_db
 from models import Profile, User
-from models.base import PydanticObjectId
 
 from .base import BaseProfileStorage, BaseUserStorage
 from .profile import get_profile_storage
@@ -49,7 +49,7 @@ class UserStorageMongoDB(BaseUserStorage):
 
     async def activate_user(self, user_id: str):
         await self.collection.update_one(
-            {"_id": PydanticObjectId(user_id)},
+            {"_id": ObjectId(user_id)},
             {"$set": {"is_active": True, "updated_at": datetime.now()}},
         )
 
@@ -76,14 +76,14 @@ class UserStorageMongoDB(BaseUserStorage):
         return User(**user_doc) if user_doc else None
 
     async def get_by_id(self, user_id: str) -> User:
-        return await self._find_user({"_id": PydanticObjectId(user_id)})
+        return await self._find_user({"_id": ObjectId(user_id)})
 
     async def delete_by_id(self, user_id: str):
-        await self.collection.delete_one({"_id": PydanticObjectId(user_id)})
+        await self.collection.delete_one({"_id": ObjectId(user_id)})
 
     async def change_password(self, user_id: str, new_password: str):
         await self.collection.update_one(
-            {"_id": PydanticObjectId(user_id)},
+            {"_id": ObjectId(user_id)},
             {
                 "$set": {
                     "password_hash": new_password,
