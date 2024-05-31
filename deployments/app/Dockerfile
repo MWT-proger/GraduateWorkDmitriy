@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM dockerhub.timeweb.cloud/library/python:3.11-slim
 
 ENV HOME_DIR=/usr/app
 ENV LOCAL_DIR=app
