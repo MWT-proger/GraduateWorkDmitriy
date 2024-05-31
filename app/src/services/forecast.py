@@ -7,7 +7,7 @@
 
 import asyncio
 from functools import lru_cache
-from typing import Any, List
+from typing import Any, AsyncGenerator, List
 
 from fastapi import Depends
 
@@ -36,6 +36,16 @@ class ForecastService(BaseForecastService):
         self, user_id: str
     ) -> List[ResultForecastModel]:
         return self.storage.get_documents_by_user(user_id=user_id)
+
+    async def get_users_history_by_id(
+        self, user_id: str, forecast_id: str
+    ) -> AsyncGenerator[ResultForecastModel, None]:
+        obj = await self.storage.get_documents_by_user_and_id(
+            user_id=user_id, forecast_id=forecast_id
+        )
+        if not obj:
+            raise ForecastServiceException("Объект не найден", status_code=404)
+        return obj
 
     async def get_train_test_result(
         self, data: TrainTestDataSchema, user_id: str, set_progress: Any

@@ -115,6 +115,7 @@ class StatusForecastEnum(str, Enum):
 
 
 class ResultForecastSchema(BaseModel):
+    id: Optional[str] = None
     message: Optional[str] = None
     status: StatusForecastEnum = StatusForecastEnum.success
     train_metrics: Optional[dict[str, Any]] = None
@@ -122,6 +123,18 @@ class ResultForecastSchema(BaseModel):
     test_ts: Optional[TimeseriesSchema] = None
     train_ts: Optional[TimeseriesSchema] = None
     exog_ts: Optional[TimeseriesSchema] = None
+
+
+class ResultForecastDataListSchema(BaseModel):
+    id: Optional[str]
+    message: Optional[str] = None
+    status: StatusForecastEnum = StatusForecastEnum.success
+    train_metrics: Optional[dict[str, Any]] = None
+    test_metrics: Optional[dict[str, Any]] = None
+
+
+class ResultForecastListSchema(BaseModel):
+    data: List[ResultForecastDataListSchema] = []
 
 
 class ForecastProgressEnum(Enum):

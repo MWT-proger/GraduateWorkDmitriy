@@ -1,6 +1,7 @@
 from functools import lru_cache
 from typing import AsyncGenerator
 
+from bson import ObjectId
 from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
@@ -32,6 +33,15 @@ class ForecastStorageMongoDB(BaseForecastStorage):
         )
         for doc in documents:
             yield ResultForecastModel(**doc)
+
+    async def get_documents_by_user_and_id(
+        self, user_id: str, forecast_id: str
+    ) -> ResultForecastModel:
+
+        doc = await self.collection.find_one(
+            {"_id": ObjectId(forecast_id), "user_id": user_id}
+        )
+        return ResultForecastModel(**doc) if doc else None
 
 
 @lru_cache()

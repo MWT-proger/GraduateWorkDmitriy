@@ -73,6 +73,11 @@ class BaseForecastStorage(BaseStorage):
         self, user_id: str, length: int = 100
     ) -> AsyncGenerator[ResultForecastModel, None]: ...
 
+    @abstractmethod
+    async def get_documents_by_user_and_id(
+        self, user_id: str, forecast_id: str
+    ) -> ResultForecastModel: ...
+
 
 class BaseDatasetStorage(BaseStorage):
 

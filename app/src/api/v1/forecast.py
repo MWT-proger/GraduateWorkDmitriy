@@ -1,13 +1,14 @@
-from typing import List
-
 from fastapi import APIRouter, Depends
 
 from auth.auth_bearer import JWTBearer, get_current_user_from_ws
 from core.manager_ws import ManagerWebSocket, get_manager_web_socket
+from models.base import PydanticObjectId
 from schemas import TrainTestDataSchema
 from schemas.auth import AuthJWTSchema
 from schemas.forecast import (
     ForecastProgressEnum,
+    ResultForecastDataListSchema,
+    ResultForecastListSchema,
     ResultForecastSchema,
     ResultWebSocketForecastDataSchema,
     ResultWebSocketForecastSchema,
@@ -61,7 +62,7 @@ async def websocket_endpoint(
         await manager_ws.close()
 
 
-@router.get("/history", response_model=List[ResultForecastSchema])
+@router.get("/history", response_model=ResultForecastListSchema)
 async def get_list_history(
     auth_data: AuthJWTSchema = Depends(JWTBearer()),
     service: BaseForecastService = Depends(get_forecast_service),
@@ -70,14 +71,35 @@ async def get_list_history(
     data = []
     async for obj in result:
         data.append(
-            ResultForecastSchema(
+            ResultForecastDataListSchema(
+                id=obj.id,
                 status=obj.status,
                 message=obj.message,
                 train_metrics=obj.train_metrics,
                 test_metrics=obj.test_metrics,
-                test_ts=obj.test_ts,
-                train_ts=obj.test_ts,
-                exog_ts=obj.exog_ts,
             )
         )
+    return ResultForecastListSchema(data=data)
+
+
+@router.get("/history/{forecast_id}", response_model=ResultForecastSchema)
+async def get_detail_history(
+    forecast_id: PydanticObjectId,
+    auth_data: AuthJWTSchema = Depends(JWTBearer()),
+    service: BaseForecastService = Depends(get_forecast_service),
+):
+    obj = await service.get_users_history_by_id(
+        user_id=auth_data.user_id, forecast_id=forecast_id
+    )
+
+    data = ResultForecastSchema(
+        id=obj.id,
+        status=obj.status,
+        message=obj.message,
+        train_metrics=obj.train_metrics,
+        test_metrics=obj.test_metrics,
+        test_ts=obj.test_ts,
+        train_ts=obj.test_ts,
+        exog_ts=obj.exog_ts,
+    )
     return data

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, AsyncGenerator, List
+from typing import Any, AsyncGenerator
 
 from models.dataset import Dataset
 from models.forecast import ResultForecastModel
@@ -68,7 +68,12 @@ class BaseForecastService(ABC):
     @abstractmethod
     async def get_users_history(
         self, user_id: str
-    ) -> List[ResultForecastModel]: ...
+    ) -> AsyncGenerator[ResultForecastModel, None]: ...
+
+    @abstractmethod
+    async def get_users_history_by_id(
+        self, user_id: str, forecast_id: str
+    ) -> ResultForecastModel: ...
 
 
 class BaseDatasetService(ABC):
