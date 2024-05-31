@@ -28,9 +28,9 @@ class ForecastStorageMongoDB(BaseForecastStorage):
     async def get_documents_by_user(
         self, user_id: str, length: int = 100
     ) -> AsyncGenerator[ResultForecastModel, None]:
-        documents = await self.collection.find({"user_id": user_id}).to_list(
-            length
-        )
+        documents = await self.collection.find(
+            {"user_id": ObjectId(user_id)}
+        ).to_list(length)
         for doc in documents:
             yield ResultForecastModel(**doc)
 
@@ -39,7 +39,7 @@ class ForecastStorageMongoDB(BaseForecastStorage):
     ) -> ResultForecastModel:
 
         doc = await self.collection.find_one(
-            {"_id": ObjectId(forecast_id), "user_id": user_id}
+            {"_id": ObjectId(forecast_id), "user_id": ObjectId(user_id)}
         )
         return ResultForecastModel(**doc) if doc else None
 

@@ -17,8 +17,7 @@ class ProfileStorageMongoDB(BaseProfileStorage):
         )
 
     async def create(self, profile: Profile, session=None):
-        data = profile.model_dump(exclude=["id"])
-        data["_id"] = profile.id
+        data = profile.model_dump(by_alias=True)
         await self.collection.insert_one(data, session=session)
 
 

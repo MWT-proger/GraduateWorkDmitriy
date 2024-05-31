@@ -32,14 +32,12 @@ class UserStorageMongoDB(BaseUserStorage):
         async with await self.db.client.start_session() as session:
             async with session.start_transaction():
                 user_data = user.model_dump(
-                    exclude=["id", "email", "username"]
+                    exclude=["email", "username"], by_alias=True
                 )
-
                 user_data.update(
                     {
                         "email": user.email.lower(),
                         "username": user.username.lower(),
-                        "_id": user.id,
                     }
                 )
                 await self.collection.insert_one(user_data, session=session)

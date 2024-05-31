@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from pydantic import EmailStr, Field
+from bson import ObjectId
+from pydantic import EmailStr, Field, field_serializer
 
 from .base import BaseUUIDModel, PydanticObjectId, datetime_now
 
@@ -25,3 +26,7 @@ class Profile(BaseUUIDModel):
     user_id: PydanticObjectId
     updated_at: datetime = Field(default_factory=datetime_now)
     created_at: datetime = Field(default_factory=datetime_now)
+
+    @field_serializer("user_id")
+    def serialize_dt(self, user_id: PydanticObjectId, _info):
+        return ObjectId(user_id)

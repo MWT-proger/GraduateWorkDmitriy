@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from pydantic import Field
+from bson import ObjectId
+from pydantic import Field, field_serializer
 
 from .base import BaseUUIDModel, PydanticObjectId, datetime_now
 
@@ -10,3 +11,7 @@ class Auth(BaseUUIDModel):
     user_agent: str
     refresh_token: str
     created_at: datetime = Field(default_factory=datetime_now)
+
+    @field_serializer("user_id")
+    def serialize_dt(self, user_id: PydanticObjectId, _info):
+        return ObjectId(user_id)

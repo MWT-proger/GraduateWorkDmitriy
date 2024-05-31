@@ -24,8 +24,7 @@ class AuthStorageMongoDB(BaseAuthStorage):
         self.db = db
 
     async def create(self, auth: Auth):
-        data = auth.model_dump(exclude=["id"])
-        data["_id"] = auth.id
+        data = auth.model_dump(by_alias=True)
 
         await self.collection.insert_one(data)
 
@@ -33,7 +32,7 @@ class AuthStorageMongoDB(BaseAuthStorage):
         self, user_id: str, user_agent: str, new_refresh_token: str
     ):
         await self.collection.update_one(
-            {"user_id": user_id, "user_agent": user_agent},
+            {"user_id": ObjectId(user_id), "user_agent": user_agent},
             {"$set": {"refresh_token": new_refresh_token}},
             upsert=True,
         )
@@ -42,7 +41,7 @@ class AuthStorageMongoDB(BaseAuthStorage):
         self, user_id: str, user_agent: str
     ) -> Optional[Auth]:
         auth_doc = await self.collection.find_one(
-            {"user_id": user_id, "user_agent": user_agent}
+            {"user_id": ObjectId(user_id), "user_agent": user_agent}
         )
         return Auth(**auth_doc) if auth_doc else None
 

@@ -29,16 +29,18 @@ class DatasetStorageMongoDB(BaseDatasetStorage):
     async def get_documents_by_user(
         self, user_id: str, length: int = 100
     ) -> AsyncGenerator[Dataset, None]:
-        documents = await self.collection.find({"user_id": user_id}).to_list(
-            length
-        )
+        documents = await self.collection.find(
+            {"user_id": ObjectId(user_id)}
+        ).to_list(length)
         for doc in documents:
             yield Dataset(**doc)
 
     async def get_document_by_user_and_id(
         self, user_id: str, doc_id: PydanticObjectId
     ) -> Dataset:
-        user_doc = await self.collection.find_one({"_id": ObjectId(doc_id)})
+        user_doc = await self.collection.find_one(
+            {"_id": ObjectId(doc_id), "user_id": ObjectId(user_id)}
+        )
         return Dataset(**user_doc) if user_doc else None
 
 
