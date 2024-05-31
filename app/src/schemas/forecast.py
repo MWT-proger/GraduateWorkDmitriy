@@ -163,6 +163,7 @@ class ResultWebSocketForecastDataSchema(BaseModel):
 class ResultWebSocketForecastSchema(BaseModel):
     status: StatusForecastEnum = StatusForecastEnum.success
     progress: Optional[ForecastProgressEnum] = None
+    detail: Optional[List[dict[str, Any]]] = None
 
     message: Optional[str] = None
     data: Optional[ResultWebSocketForecastDataSchema] = None
