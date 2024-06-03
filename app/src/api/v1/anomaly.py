@@ -45,6 +45,7 @@ async def websocket_endpoint(
             progress=AnomalyProgressEnum.finish,
             message=result.message,
             data=ResultWebSocketAnomalyDataSchema(
+                params=result.params,
                 train_metrics=result.train_metrics,
                 test_metrics=result.test_metrics,
                 test_ts=result.test_ts,
@@ -81,6 +82,7 @@ async def train_test(
         progress=AnomalyProgressEnum.finish,
         message=result.message,
         data=ResultWebSocketAnomalyDataSchema(
+            params=result.params,
             train_metrics=result.train_metrics,
             test_metrics=result.test_metrics,
             test_ts=result.test_ts,
@@ -104,6 +106,7 @@ async def get_list_history(
                 id=obj.id,
                 status=obj.status,
                 message=obj.message,
+                params=obj.params,
                 train_metrics=obj.train_metrics,
                 test_metrics=obj.test_metrics,
             )
@@ -125,6 +128,7 @@ async def get_detail_history(
         id=obj.id,
         status=obj.status,
         message=obj.message,
+        params=obj.params,
         train_metrics=obj.train_metrics,
         test_metrics=obj.test_metrics,
         test_ts=obj.test_ts,

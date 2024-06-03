@@ -141,6 +141,7 @@ class AnomalyTrainTestDataSchema(BaseModel):
 
 
 class ResultWebSocketAnomalyDataSchema(BaseModel):
+    params: Optional[AnomalyTrainTestDataSchema] = None
     train_metrics: Optional[dict[str, Any]] = None
     test_metrics: Optional[dict[str, Any]] = None
 
@@ -168,6 +169,7 @@ class ResultAnomalySchema(BaseModel):
     id: Optional[str] = None
     message: Optional[str] = None
     status: StatusAnomalyEnum = StatusAnomalyEnum.success
+    params: Optional[AnomalyTrainTestDataSchema] = None
     train_metrics: Optional[dict[str, Any]] = None
     test_metrics: Optional[dict[str, Any]] = None
 
@@ -180,6 +182,7 @@ class ResultAnomalyDataListSchema(BaseModel):
     id: Optional[str]
     message: Optional[str] = None
     status: StatusAnomalyEnum = StatusAnomalyEnum.success
+    params: Optional[AnomalyTrainTestDataSchema] = None
     train_metrics: Optional[dict[str, Any]] = None
     test_metrics: Optional[dict[str, Any]] = None
 

@@ -108,6 +108,7 @@ class ResultForecastSchema(BaseModel):
     id: Optional[str] = None
     message: Optional[str] = None
     status: StatusForecastEnum = StatusForecastEnum.success
+    params: Optional[TrainTestDataSchema] = None
     train_metrics: Optional[dict[str, Any]] = None
     test_metrics: Optional[dict[str, Any]] = None
     test_ts: Optional[TimeseriesSchema] = None
@@ -119,6 +120,7 @@ class ResultForecastDataListSchema(BaseModel):
     id: Optional[str]
     message: Optional[str] = None
     status: StatusForecastEnum = StatusForecastEnum.success
+    params: Optional[TrainTestDataSchema] = None
     train_metrics: Optional[dict[str, Any]] = None
     test_metrics: Optional[dict[str, Any]] = None
 
@@ -156,6 +158,7 @@ class ForecastProgressEnum(Enum):
 
 
 class ResultWebSocketForecastDataSchema(BaseModel):
+    params: Optional[TrainTestDataSchema] = None
     train_metrics: Optional[dict[str, Any]] = None
     test_metrics: Optional[dict[str, Any]] = None
     test_ts: Optional[TimeseriesSchema] = None

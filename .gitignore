@@ -165,3 +165,4 @@ deployments/mongodb/keys/keyfile
 app/src/data/DefaultForecaster/config.json
 app/src/data/DefaultForecaster/model.pkl
 app/src/file_storage/*
+app/src/data/*
