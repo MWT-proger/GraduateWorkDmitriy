@@ -1,0 +1,24 @@
+meta {
+  name: Авторизация
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/{{api_v1}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+  "username": "demo_user",
+      "password": "demo_password"
+  }
+}
+
+script:post-response {
+  let data = res.getBody();
+  let token = bru.setEnvVar("access_token", data.access_token);
+  let token_r = bru.setEnvVar("refresh_token", data.refresh_token);
+}

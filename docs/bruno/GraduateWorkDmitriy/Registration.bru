@@ -1,0 +1,21 @@
+meta {
+  name: Registration
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/{{api_v1}}/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "username": "demo_user",
+      "password": "demo_password",
+      "email": "dry.wats@gmail.com",
+      "full_name": "22Иванов1 Иван Иванович",
+      "phone_number": "+79990000000"
+  }
+}

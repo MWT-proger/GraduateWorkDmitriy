@@ -1,0 +1,15 @@
+meta {
+  name: history
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/{{api_v1}}/forecasts
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}

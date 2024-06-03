@@ -1,0 +1,15 @@
+meta {
+  name: Удалить
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{base_url}}/{{api_v1}}/users
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}

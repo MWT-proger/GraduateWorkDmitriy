@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends
 
+from schemas.user import GetUserSchema, UpdateUserSchema
 from auth.auth_bearer import JWTBearer
 from schemas import (
     ChangePasswordUserSchema,
     ConfirmEmailSchema,
     CreateUserSchema,
     SuccessSchema,
+    
 )
 from schemas.auth import AuthJWTSchema
 from services import BaseUserService, get_user_service
@@ -24,6 +26,15 @@ async def create(
 ):
     await service.create(data)
     return SuccessSchema(msg="Успешно. Необходимо подтвердить почту.")
+
+
+@router.patch("", response_model=GetUserSchema, status_code=200)
+async def update(
+    data: UpdateUserSchema,
+    service: BaseUserService = Depends(get_user_service),
+):
+    data  = await service.update(data)
+    return GetUserSchema()
 
 
 @router.post(

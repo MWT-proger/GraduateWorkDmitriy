@@ -1,0 +1,23 @@
+meta {
+  name: Смена пароля
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/{{api_v1}}/users/change_password
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "current_password": "sghdggec2",
+    "new_password": "newsecurepassword123",
+    "confirm_new_password": "newsecurepassword123"
+  }
+}

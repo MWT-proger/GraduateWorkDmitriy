@@ -1,0 +1,34 @@
+meta {
+  name: Делаем запрос трин
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/{{api_v1}}/forecasts
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+      "file_id": "6659fc25d513dbecafe7c25a",
+      "target_col": "temp_max",
+      "algorithm": "DefaultForecaster",
+      "algorithm_params": [
+          {"parametr": "max_forecast_steps", "value": null},
+          {"parametr": "granularity", "value": null}
+      ],
+      "train_percentage": 80,
+      "file_mode": "single"
+  }
+  
+}

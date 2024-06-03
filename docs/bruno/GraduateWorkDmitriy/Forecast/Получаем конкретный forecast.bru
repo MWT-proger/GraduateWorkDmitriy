@@ -1,0 +1,15 @@
+meta {
+  name: Получаем конкретный forecast
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/{{api_v1}}/forecasts/665db60f0d14a2f245c6e2a9
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}

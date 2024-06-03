@@ -1,0 +1,31 @@
+meta {
+  name: Тестовая апи для выявления аномалии
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/{{api_v1}}/anomalies
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+      "file_id": "6659fc25d513dbecafe7c25a",
+      "columns": ["temp_max"],
+      "algorithm": "DefaultDetector",
+      "label_column": "temp_min",
+      "algorithm_params": [
+          {"parametr": "n_threads", "value": 1},
+          {"parametr": "granularity", "value": null}
+      ],
+      "train_percentage": 50,
+      "file_mode": "single"
+  }
+  
+}

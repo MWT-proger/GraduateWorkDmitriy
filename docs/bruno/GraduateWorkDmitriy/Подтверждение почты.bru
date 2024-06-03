@@ -1,0 +1,22 @@
+meta {
+  name: Подтверждение почты
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/{{api_v1}}/users/confirm_email
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+    "email": "dry.wats@gmail.com",
+    "otp_code": "556497"
+  }
+}

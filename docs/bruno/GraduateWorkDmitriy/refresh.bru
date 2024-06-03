@@ -1,0 +1,22 @@
+meta {
+  name: refresh
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/{{api_v1}}/auth/refresh
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{refresh_token}}
+}
+
+script:post-response {
+  let data = res.getBody();
+  let token = bru.setEnvVar("access_token", data.access_token);
+  let token_r = bru.setEnvVar("refresh_token", data.refresh_token);
+  
+}

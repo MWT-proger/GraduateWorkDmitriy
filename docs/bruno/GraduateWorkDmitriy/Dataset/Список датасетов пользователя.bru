@@ -1,0 +1,15 @@
+meta {
+  name: Список датасетов пользователя
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/{{api_v1}}/datasets
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
