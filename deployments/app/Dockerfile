@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR $HOME_DIR
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc && \
+    apt-get install -y --no-install-recommends gcc default-jdk && \
     pip install --upgrade pip 
 
 COPY $LOCAL_DIR/requirements.txt .

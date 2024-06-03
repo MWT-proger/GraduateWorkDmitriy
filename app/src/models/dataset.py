@@ -4,10 +4,10 @@ from typing import List, Optional
 from bson import ObjectId
 from pydantic import Field, field_serializer
 
-from .base import BaseUUIDModel, PydanticObjectId, datetime_now
+from .base import BaseObjectIDModel, PydanticObjectId, datetime_now
 
 
-class Dataset(BaseUUIDModel):
+class Dataset(BaseObjectIDModel):
     file_path: Optional[str] = None
     file_name: str
     user_id: PydanticObjectId

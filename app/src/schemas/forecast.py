@@ -1,4 +1,3 @@
-from datetime import datetime
 from enum import Enum
 from typing import Any, List, Optional
 
@@ -14,11 +13,7 @@ from pydantic_core import InitErrorDetails, PydanticCustomError
 from typing_extensions import Self
 
 from models.base import PydanticObjectId
-
-
-class ParamsAlgorithmSchema(BaseModel):
-    parametr: str = Field(example="max_forecast_steps")
-    value: Any = Field(example="None")
+from schemas.base import ParamsAlgorithmSchema, TimeseriesSchema
 
 
 class AlgorithmForecast(str, Enum):
@@ -101,11 +96,6 @@ class TrainTestDataSchema(BaseModel):
                 "Проверка параметров алгоритма", errors
             )
         return self
-
-
-class TimeseriesSchema(BaseModel):
-    data: Optional[dict[str, Any]]
-    index: List[datetime]
 
 
 class StatusForecastEnum(str, Enum):

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import AsyncGenerator, Optional
 
 from models import Profile, User
+from models.anomaly import ResultAnomalyModel
 from models.auth import Auth
 from models.dataset import Dataset
 from models.forecast import ResultForecastModel
@@ -93,3 +94,19 @@ class BaseDatasetStorage(BaseStorage):
     async def get_document_by_user_and_id(
         self, user_id: str, doc_id: str
     ) -> Dataset: ...
+
+
+class BaseAnomalyStorage(BaseStorage):
+
+    @abstractmethod
+    async def save_result(self, data: ResultAnomalyModel): ...
+
+    @abstractmethod
+    async def get_documents_by_user(
+        self, user_id: str, length: int = 100
+    ) -> AsyncGenerator[ResultAnomalyModel, None]: ...
+
+    @abstractmethod
+    async def get_documents_by_user_and_id(
+        self, user_id: str, anomaly_id: str
+    ) -> ResultAnomalyModel: ...

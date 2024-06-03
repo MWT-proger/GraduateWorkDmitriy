@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.post("/upload", response_model=DatasetSchema)
+@router.post("", response_model=DatasetSchema)
 async def upload_dataset(
     dataset: UploadFile = File(...),
     auth_data: AuthJWTSchema = Depends(JWTBearer()),
@@ -29,7 +29,7 @@ async def upload_dataset(
     )
 
 
-@router.get("/me", response_model=ListDatasetsSchema)
+@router.get("", response_model=ListDatasetsSchema)
 async def get_user_datasets(
     auth_data: AuthJWTSchema = Depends(JWTBearer()),
     service: BaseDatasetService = Depends(get_dataset_service),

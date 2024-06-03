@@ -1,0 +1,418 @@
+{
+    "DefaultDetector": {
+        "granularity": {
+            "type": "str",
+            "default": null
+        },
+        "n_threads": {
+            "type": "int",
+            "default": 1
+        }
+    },
+    "ArimaDetector": {
+        "order": {
+            "type": "tuple",
+            "default": [
+                4,
+                1,
+                2
+            ]
+        },
+        "seasonal_order": {
+            "type": "tuple",
+            "default": [
+                0,
+                0,
+                0,
+                0
+            ]
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        },
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "DynamicBaseline": {
+        "train_window": {
+            "type": "str",
+            "default": null
+        },
+        "wind_sz": {
+            "type": "str",
+            "default": "1h"
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "IsolationForest": {
+        "max_n_samples": {
+            "type": "int",
+            "default": null
+        },
+        "n_estimators": {
+            "type": "int",
+            "default": 100
+        },
+        "n_jobs": {
+            "type": "int",
+            "default": -1
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "ETSDetector": {
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "error": {
+            "type": "str",
+            "default": "add"
+        },
+        "trend": {
+            "type": "str",
+            "default": "add"
+        },
+        "damped_trend": {
+            "type": "bool",
+            "default": true
+        },
+        "seasonal": {
+            "type": "str",
+            "default": "add"
+        },
+        "seasonal_periods": {
+            "type": "int",
+            "default": null
+        },
+        "refit": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": false
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "MSESDetector": {
+        "max_forecast_steps": {
+            "type": "int",
+            "default": 100
+        },
+        "online_updates": {
+            "type": "bool",
+            "default": true
+        },
+        "max_backstep": {
+            "type": "int",
+            "default": null
+        },
+        "recency_weight": {
+            "type": "float",
+            "default": 0.5
+        },
+        "accel_weight": {
+            "type": "float",
+            "default": 1.0
+        },
+        "optimize_acc": {
+            "type": "bool",
+            "default": true
+        },
+        "eta": {
+            "type": "float",
+            "default": 0.0
+        },
+        "rho": {
+            "type": "float",
+            "default": 0.0
+        },
+        "phi": {
+            "type": "float",
+            "default": 2.0
+        },
+        "inflation": {
+            "type": "float",
+            "default": 1.0
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "ProphetDetector": {
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "yearly_seasonality": {
+            "type": "str",
+            "default": "auto"
+        },
+        "weekly_seasonality": {
+            "type": "str",
+            "default": "auto"
+        },
+        "daily_seasonality": {
+            "type": "str",
+            "default": "auto"
+        },
+        "seasonality_mode": {
+            "type": "str",
+            "default": "additive"
+        },
+        "uncertainty_samples": {
+            "type": "int",
+            "default": 100
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "RandomCutForest": {
+        "n_estimators": {
+            "type": "int",
+            "default": 100
+        },
+        "parallel": {
+            "type": "bool",
+            "default": false
+        },
+        "seed": {
+            "type": "int",
+            "default": null
+        },
+        "max_n_samples": {
+            "type": "int",
+            "default": 512
+        },
+        "thread_pool_size": {
+            "type": "int",
+            "default": 1
+        },
+        "online_updates": {
+            "type": "bool",
+            "default": false
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "SarimaDetector": {
+        "order": {
+            "type": "tuple",
+            "default": [
+                4,
+                1,
+                2
+            ]
+        },
+        "seasonal_order": {
+            "type": "tuple",
+            "default": [
+                2,
+                0,
+                1,
+                24
+            ]
+        },
+        "exog_aggregation_policy": {
+            "type": "str",
+            "default": "Mean"
+        },
+        "exog_missing_value_policy": {
+            "type": "str",
+            "default": "ZFill"
+        },
+        "max_forecast_steps": {
+            "type": "int",
+            "default": null
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "WindStats": {
+        "wind_sz": {
+            "type": "int",
+            "default": 30
+        },
+        "max_day": {
+            "type": "int",
+            "default": 4
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "SpectralResidual": {
+        "local_wind_sz": {
+            "type": "int",
+            "default": 21
+        },
+        "q": {
+            "type": "int",
+            "default": 3
+        },
+        "estimated_points": {
+            "type": "int",
+            "default": 5
+        },
+        "predicting_points": {
+            "type": "int",
+            "default": 5
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "ZMS": {
+        "base": {
+            "type": "int",
+            "default": 2
+        },
+        "n_lags": {
+            "type": "int",
+            "default": null
+        },
+        "lag_inflation": {
+            "type": "float",
+            "default": 1.0
+        },
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    },
+    "DeepPointAnomalyDetector": {
+        "max_score": {
+            "type": "int",
+            "default": 1000
+        },
+        "enable_calibrator": {
+            "type": "bool",
+            "default": true
+        },
+        "enable_threshold": {
+            "type": "bool",
+            "default": true
+        }
+    }
+}

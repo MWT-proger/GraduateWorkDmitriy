@@ -14,6 +14,7 @@ class MongoCollections:
     AUTH = "auth"
     FORECAST = "forecast"
     DATASET = "dataset"
+    ANOMALY = "anomaly"
 
 
 class FileStorage:

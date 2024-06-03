@@ -16,7 +16,7 @@ def check_object_id(value: Any) -> str:
 PydanticObjectId = Annotated[Any, AfterValidator(check_object_id)]
 
 
-class BaseUUIDModel(BaseModel):
+class BaseObjectIDModel(BaseModel):
     id: PydanticObjectId = Field(default_factory=ObjectId, alias="_id")
 
     model_config = ConfigDict(

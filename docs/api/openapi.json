@@ -5,13 +5,13 @@
         "version": "0.1.0"
     },
     "paths": {
-        "/api/v1/user": {
+        "/api/v1/users": {
             "post": {
                 "tags": [
                     "User"
                 ],
                 "summary": "Create",
-                "operationId": "create_api_v1_user_post",
+                "operationId": "create_api_v1_users_post",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -50,7 +50,7 @@
                     "User"
                 ],
                 "summary": "Remove",
-                "operationId": "remove_api_v1_user_delete",
+                "operationId": "remove_api_v1_users_delete",
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -70,13 +70,13 @@
                 ]
             }
         },
-        "/api/v1/user/change_password": {
+        "/api/v1/users/change_password": {
             "post": {
                 "tags": [
                     "User"
                 ],
                 "summary": "Change Password",
-                "operationId": "change_password_api_v1_user_change_password_post",
+                "operationId": "change_password_api_v1_users_change_password_post",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -116,13 +116,13 @@
                 ]
             }
         },
-        "/api/v1/user/confirm_email": {
+        "/api/v1/users/confirm_email": {
             "post": {
                 "tags": [
                     "User"
                 ],
                 "summary": "Confirm Email",
-                "operationId": "confirm_email_api_v1_user_confirm_email_post",
+                "operationId": "confirm_email_api_v1_users_confirm_email_post",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -250,13 +250,37 @@
                 ]
             }
         },
-        "/api/v1/forecast/train-test": {
+        "/api/v1/forecasts": {
+            "get": {
+                "tags": [
+                    "Forecast"
+                ],
+                "summary": "Get List History",
+                "operationId": "get_list_history_api_v1_forecasts_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultForecastListSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Forecast"
                 ],
-                "summary": "Login",
-                "operationId": "login_api_v1_forecast_train_test_post",
+                "summary": "Train Test",
+                "operationId": "train_test_api_v1_forecasts_post",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -273,7 +297,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ResultForecastSchema"
+                                    "$ref": "#/components/schemas/ResultWebSocketForecastSchema"
                                 }
                             }
                         }
@@ -296,18 +320,204 @@
                 ]
             }
         },
-        "/api/v1/dataset/upload": {
+        "/api/v1/forecasts/{forecast_id}": {
+            "get": {
+                "tags": [
+                    "Forecast"
+                ],
+                "summary": "Get Detail History",
+                "operationId": "get_detail_history_api_v1_forecasts__forecast_id__get",
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "forecast_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "title": "Forecast Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultForecastSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/anomalies": {
+            "get": {
+                "tags": [
+                    "Anomaly"
+                ],
+                "summary": "Get List History",
+                "operationId": "get_list_history_api_v1_anomalies_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultAnomalyListSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Anomaly"
+                ],
+                "summary": "Train Test",
+                "operationId": "train_test_api_v1_anomalies_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AnomalyTrainTestDataSchema"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultWebSocketAnomalySchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/anomalies/{anomaly_id}": {
+            "get": {
+                "tags": [
+                    "Anomaly"
+                ],
+                "summary": "Get Detail History",
+                "operationId": "get_detail_history_api_v1_anomalies__anomaly_id__get",
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "anomaly_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "title": "Anomaly Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultAnomalySchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/datasets": {
+            "get": {
+                "tags": [
+                    "Dataset"
+                ],
+                "summary": "Get User Datasets",
+                "operationId": "get_user_datasets_api_v1_datasets_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListDatasetsSchema"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWTBearer": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Dataset"
                 ],
                 "summary": "Upload Dataset",
-                "operationId": "upload_dataset_api_v1_dataset_upload_post",
+                "operationId": "upload_dataset_api_v1_datasets_post",
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/Body_upload_dataset_api_v1_dataset_upload_post"
+                                "$ref": "#/components/schemas/Body_upload_dataset_api_v1_datasets_post"
                             }
                         }
                     },
@@ -341,37 +551,197 @@
                     }
                 ]
             }
-        },
-        "/api/v1/dataset/me": {
-            "get": {
-                "tags": [
-                    "Dataset"
-                ],
-                "summary": "Get User Datasets",
-                "operationId": "get_user_datasets_api_v1_dataset_me_get",
-                "responses": {
-                    "200": {
-                        "description": "Successful Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ListDatasetsSchema"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "JWTBearer": []
-                    }
-                ]
-            }
         }
     },
     "components": {
         "schemas": {
-            "Body_upload_dataset_api_v1_dataset_upload_post": {
+            "AlgorithmAnomaly": {
+                "type": "string",
+                "enum": [
+                    "DefaultDetector",
+                    "ArimaDetector",
+                    "DynamicBaseline",
+                    "IsolationForest",
+                    "ETSDetector",
+                    "MSESDetector",
+                    "ProphetDetector",
+                    "RandomCutForest",
+                    "SarimaDetector",
+                    "WindStats",
+                    "SpectralResidual",
+                    "ZMS",
+                    "DeepPointAnomalyDetector"
+                ],
+                "title": "AlgorithmAnomaly"
+            },
+            "AlgorithmForecast": {
+                "type": "string",
+                "enum": [
+                    "DefaultForecaster",
+                    "Arima",
+                    "LGBMForecaster",
+                    "ETS",
+                    "AutoETS",
+                    "Prophet",
+                    "AutoProphet",
+                    "Sarima",
+                    "VectorAR",
+                    "RandomForestForecaster",
+                    "ExtraTreesForecaster"
+                ],
+                "title": "AlgorithmForecast"
+            },
+            "AnomalyProgressEnum": {
+                "type": "array",
+                "enum": [
+                    [
+                        "Запрос получен.",
+                        5
+                    ],
+                    [
+                        "Файл с датасетом временного ряда найден",
+                        5
+                    ],
+                    [
+                        "Данные из файла загружены.",
+                        20
+                    ],
+                    [
+                        "Обучение детектора аномалий ...",
+                        20
+                    ],
+                    [
+                        "Обучение завершено.",
+                        60
+                    ],
+                    [
+                        "Вычисление показателей эффективности обучения...",
+                        70
+                    ],
+                    [
+                        "Получение результатов во время тестирования...",
+                        80
+                    ],
+                    [
+                        "Происходит сохранение модели.",
+                        85
+                    ],
+                    [
+                        "Формирование данных для ответа.",
+                        90
+                    ],
+                    [
+                        "Сохранение в БД успешно произведено. Ждите результат.",
+                        95
+                    ],
+                    [
+                        "Завершено",
+                        100
+                    ]
+                ],
+                "title": "AnomalyProgressEnum"
+            },
+            "AnomalyTrainTestDataSchema": {
+                "properties": {
+                    "file_id": {
+                        "title": "File Id"
+                    },
+                    "columns": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Columns",
+                        "example": [
+                            "temp_max"
+                        ]
+                    },
+                    "algorithm": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AlgorithmAnomaly"
+                            }
+                        ],
+                        "example": "DefaultDetector"
+                    },
+                    "algorithm_params": {
+                        "items": {
+                            "$ref": "#/components/schemas/ParamsAlgorithmSchema"
+                        },
+                        "type": "array",
+                        "title": "Algorithm Params",
+                        "default": []
+                    },
+                    "label_column": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Label Column"
+                    },
+                    "train_percentage": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 10.0,
+                        "title": "Train Percentage",
+                        "example": 80
+                    },
+                    "file_mode": {
+                        "type": "string",
+                        "title": "File Mode",
+                        "default": "single"
+                    },
+                    "test_filename": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Test Filename"
+                    },
+                    "threshold_class": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Threshold Class"
+                    },
+                    "threshold_params": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/ParamsAlgorithmSchema"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Threshold Params"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "file_id",
+                    "columns",
+                    "algorithm",
+                    "train_percentage"
+                ],
+                "title": "AnomalyTrainTestDataSchema"
+            },
+            "Body_upload_dataset_api_v1_datasets_post": {
                 "properties": {
                     "dataset": {
                         "type": "string",
@@ -383,7 +753,7 @@
                 "required": [
                     "dataset"
                 ],
-                "title": "Body_upload_dataset_api_v1_dataset_upload_post"
+                "title": "Body_upload_dataset_api_v1_datasets_post"
             },
             "ChangePasswordUserSchema": {
                 "properties": {
@@ -518,6 +888,60 @@
                 ],
                 "title": "DatasetSchema"
             },
+            "ForecastProgressEnum": {
+                "type": "array",
+                "enum": [
+                    [
+                        "Запрос получен.",
+                        5
+                    ],
+                    [
+                        "Файл с датасетом найден. Запускается процесс прогнозирования.",
+                        10
+                    ],
+                    [
+                        "Данные из файла загружены.",
+                        20
+                    ],
+                    [
+                        "Модель инициализирована.",
+                        25
+                    ],
+                    [
+                        "Обучение модели началось.",
+                        30
+                    ],
+                    [
+                        "Обучение модели завершено.",
+                        70
+                    ],
+                    [
+                        "Обучающие метрики вычислены.",
+                        75
+                    ],
+                    [
+                        "Тестовые метрики вычислены.",
+                        80
+                    ],
+                    [
+                        "Происходит сохранение модели.",
+                        85
+                    ],
+                    [
+                        "Процесс прогнозирование успешно произведен. Идет сохранение в БД.",
+                        90
+                    ],
+                    [
+                        "Сохранение в БД успешно произведено. Ждите результат.",
+                        95
+                    ],
+                    [
+                        "Завершено",
+                        100
+                    ]
+                ],
+                "title": "ForecastProgressEnum"
+            },
             "HTTPValidationError": {
                 "properties": {
                     "detail": {
@@ -570,50 +994,6 @@
                 ],
                 "title": "LoginSchema"
             },
-            "MetricTable": {
-                "properties": {
-                    "data": {
-                        "title": "Data"
-                    },
-                    "columns": {
-                        "title": "Columns"
-                    },
-                    "editable": {
-                        "type": "boolean",
-                        "title": "Editable"
-                    },
-                    "style_table": {
-                        "type": "object",
-                        "title": "Style Table"
-                    },
-                    "style_data": {
-                        "type": "object",
-                        "title": "Style Data"
-                    },
-                    "style_header": {
-                        "type": "object",
-                        "title": "Style Header"
-                    },
-                    "style_cell_conditional": {
-                        "title": "Style Cell Conditional"
-                    },
-                    "style_header_conditional": {
-                        "title": "Style Header Conditional"
-                    }
-                },
-                "type": "object",
-                "required": [
-                    "data",
-                    "columns",
-                    "editable",
-                    "style_table",
-                    "style_data",
-                    "style_header",
-                    "style_cell_conditional",
-                    "style_header_conditional"
-                ],
-                "title": "MetricTable"
-            },
             "ParamsAlgorithmSchema": {
                 "properties": {
                     "parametr": {
@@ -622,7 +1002,6 @@
                         "example": "max_forecast_steps"
                     },
                     "value": {
-                        "type": "string",
                         "title": "Value",
                         "example": "None"
                     }
@@ -634,29 +1013,9 @@
                 ],
                 "title": "ParamsAlgorithmSchema"
             },
-            "ResultForecastSchema": {
+            "ResultAnomalyDataListSchema": {
                 "properties": {
-                    "train_metric_table": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/MetricTable"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
-                    },
-                    "test_metric_table": {
-                        "anyOf": [
-                            {
-                                "$ref": "#/components/schemas/MetricTable"
-                            },
-                            {
-                                "type": "null"
-                            }
-                        ]
-                    },
-                    "figure_json": {
+                    "id": {
                         "anyOf": [
                             {
                                 "type": "string"
@@ -665,16 +1024,572 @@
                                 "type": "null"
                             }
                         ],
-                        "title": "Figure Json"
+                        "title": "Id"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusAnomalyEnum"
+                            }
+                        ],
+                        "default": "success"
+                    },
+                    "train_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Train Metrics"
+                    },
+                    "test_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Test Metrics"
                     }
                 },
                 "type": "object",
                 "required": [
-                    "train_metric_table",
-                    "test_metric_table",
-                    "figure_json"
+                    "id"
                 ],
+                "title": "ResultAnomalyDataListSchema"
+            },
+            "ResultAnomalyListSchema": {
+                "properties": {
+                    "data": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResultAnomalyDataListSchema"
+                        },
+                        "type": "array",
+                        "title": "Data",
+                        "default": []
+                    }
+                },
+                "type": "object",
+                "title": "ResultAnomalyListSchema"
+            },
+            "ResultAnomalySchema": {
+                "properties": {
+                    "id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Id"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusAnomalyEnum"
+                            }
+                        ],
+                        "default": "success"
+                    },
+                    "train_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Train Metrics"
+                    },
+                    "test_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Test Metrics"
+                    },
+                    "test_ts": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "test_pred": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "test_labels": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "ResultAnomalySchema"
+            },
+            "ResultForecastDataListSchema": {
+                "properties": {
+                    "id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Id"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusForecastEnum"
+                            }
+                        ],
+                        "default": "success"
+                    },
+                    "train_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Train Metrics"
+                    },
+                    "test_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Test Metrics"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id"
+                ],
+                "title": "ResultForecastDataListSchema"
+            },
+            "ResultForecastListSchema": {
+                "properties": {
+                    "data": {
+                        "items": {
+                            "$ref": "#/components/schemas/ResultForecastDataListSchema"
+                        },
+                        "type": "array",
+                        "title": "Data",
+                        "default": []
+                    }
+                },
+                "type": "object",
+                "title": "ResultForecastListSchema"
+            },
+            "ResultForecastSchema": {
+                "properties": {
+                    "id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Id"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusForecastEnum"
+                            }
+                        ],
+                        "default": "success"
+                    },
+                    "train_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Train Metrics"
+                    },
+                    "test_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Test Metrics"
+                    },
+                    "test_ts": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "train_ts": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "exog_ts": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
                 "title": "ResultForecastSchema"
+            },
+            "ResultWebSocketAnomalyDataSchema": {
+                "properties": {
+                    "train_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Train Metrics"
+                    },
+                    "test_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Test Metrics"
+                    },
+                    "test_ts": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "test_pred": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "test_labels": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "ResultWebSocketAnomalyDataSchema"
+            },
+            "ResultWebSocketAnomalySchema": {
+                "properties": {
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusAnomalyEnum"
+                            }
+                        ],
+                        "default": "success"
+                    },
+                    "progress": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/AnomalyProgressEnum"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "detail": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Detail"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "data": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ResultWebSocketAnomalyDataSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "ResultWebSocketAnomalySchema"
+            },
+            "ResultWebSocketForecastDataSchema": {
+                "properties": {
+                    "train_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Train Metrics"
+                    },
+                    "test_metrics": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Test Metrics"
+                    },
+                    "test_ts": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "train_ts": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "exog_ts": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TimeseriesSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "ResultWebSocketForecastDataSchema"
+            },
+            "ResultWebSocketForecastSchema": {
+                "properties": {
+                    "status": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/StatusForecastEnum"
+                            }
+                        ],
+                        "default": "success"
+                    },
+                    "progress": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ForecastProgressEnum"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "detail": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Detail"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "data": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/ResultWebSocketForecastDataSchema"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "ResultWebSocketForecastSchema"
+            },
+            "StatusAnomalyEnum": {
+                "type": "string",
+                "enum": [
+                    "in_process",
+                    "success",
+                    "error"
+                ],
+                "title": "StatusAnomalyEnum"
+            },
+            "StatusForecastEnum": {
+                "type": "string",
+                "enum": [
+                    "in_process",
+                    "success",
+                    "error"
+                ],
+                "title": "StatusForecastEnum"
             },
             "SuccessSchema": {
                 "properties": {
@@ -689,6 +1604,35 @@
                     "msg"
                 ],
                 "title": "SuccessSchema"
+            },
+            "TimeseriesSchema": {
+                "properties": {
+                    "data": {
+                        "anyOf": [
+                            {
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Data"
+                    },
+                    "index": {
+                        "items": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "type": "array",
+                        "title": "Index"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "data",
+                    "index"
+                ],
+                "title": "TimeseriesSchema"
             },
             "TokenJWTSchema": {
                 "properties": {
@@ -719,8 +1663,11 @@
                         "example": "temp_max"
                     },
                     "algorithm": {
-                        "type": "string",
-                        "title": "Algorithm",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/AlgorithmForecast"
+                            }
+                        ],
                         "example": "DefaultForecaster"
                     },
                     "algorithm_params": {
@@ -732,6 +1679,8 @@
                     },
                     "train_percentage": {
                         "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 10.0,
                         "title": "Train Percentage",
                         "example": 80
                     },
@@ -741,21 +1690,42 @@
                         "default": "single"
                     },
                     "feature_cols": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
                         "title": "Feature Cols"
                     },
                     "exog_cols": {
-                        "items": {
-                            "type": "string"
-                        },
-                        "type": "array",
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
                         "title": "Exog Cols"
                     },
                     "test_filename": {
-                        "type": "string",
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
                         "title": "Test Filename"
                     }
                 },

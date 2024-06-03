@@ -3,10 +3,10 @@ from datetime import datetime
 from bson import ObjectId
 from pydantic import Field, field_serializer
 
-from .base import BaseUUIDModel, PydanticObjectId, datetime_now
+from .base import BaseObjectIDModel, PydanticObjectId, datetime_now
 
 
-class Auth(BaseUUIDModel):
+class Auth(BaseObjectIDModel):
     user_id: PydanticObjectId
     user_agent: str
     refresh_token: str

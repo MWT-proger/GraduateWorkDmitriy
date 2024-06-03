@@ -3,10 +3,10 @@ from datetime import datetime
 from bson import ObjectId
 from pydantic import EmailStr, Field, field_serializer
 
-from .base import BaseUUIDModel, PydanticObjectId, datetime_now
+from .base import BaseObjectIDModel, PydanticObjectId, datetime_now
 
 
-class User(BaseUUIDModel):
+class User(BaseObjectIDModel):
     username: str = Field(min_length=3, max_length=50, example="user123")
     password_hash: str
     email: EmailStr = Field(example="user@example.com")
@@ -16,7 +16,7 @@ class User(BaseUUIDModel):
     otp_code: str = None
 
 
-class Profile(BaseUUIDModel):
+class Profile(BaseObjectIDModel):
     full_name: str = Field(
         min_length=3, max_length=100, example="Иванов Иван Иванович"
     )

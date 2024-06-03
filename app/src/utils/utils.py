@@ -1,6 +1,6 @@
 from merlion.utils.time_series import TimeSeries
 
-from schemas.forecast import TimeseriesSchema
+from schemas.base import TimeseriesSchema
 
 
 def serializer_timeseries_to_pydantic(ts: TimeSeries) -> TimeseriesSchema:
