@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from bson import ObjectId
 from pydantic import EmailStr, Field, field_serializer
@@ -26,6 +27,9 @@ class Profile(BaseObjectIDModel):
     user_id: PydanticObjectId
     updated_at: datetime = Field(default_factory=datetime_now)
     created_at: datetime = Field(default_factory=datetime_now)
+    image: Optional[str] = Field(
+        default=None, example="localhost/user/img.png"
+    )
 
     @field_serializer("user_id")
     def serialize_dt(self, user_id: PydanticObjectId, _info):

@@ -3,18 +3,32 @@ from functools import lru_cache
 from fastapi import Depends
 
 from auth.password_manager import get_password_manager
+from core.config import settings
 from core.utils import create_otp
 from exceptions.user import UserServiceException
 from models import Profile, User
 from schemas import ConfirmEmailSchema, CreateUserSchema
-from schemas.user import ChangePasswordUserSchema
+from schemas.user import (
+    ChangePasswordUserSchema,
+    GetUserProfileSchema,
+    UpdateUserSchema,
+    UserImage,
+)
+from services.dataset import ensure_directory_exists
 from services.email import get_email_service
 from storages import BaseUserStorage, get_user_storage
+from storages.base import BaseProfileStorage
+from storages.profile import get_profile_storage
 
 from .base import BaseUserService
 
 
 class UserService(BaseUserService):
+
+    def __init__(self, storage, profile_storage: BaseProfileStorage) -> None:
+        self.storage = storage
+        self.profile_storage = profile_storage
+        self.path_file_storage = settings.FILE_STORAGE.PATH
 
     async def check_exist_email(self, email: str):
         if await self.storage.get_by_email(email):
@@ -46,6 +60,77 @@ class UserService(BaseUserService):
         new_hashed_password = password_manager.generate_hash(data.new_password)
 
         await self.storage.change_password(user_id, new_hashed_password)
+
+    async def update(
+        self, data: UpdateUserSchema, user_id: str
+    ) -> GetUserProfileSchema:
+        user = await self.storage.get_by_id(user_id)
+        profile = await self.profile_storage.get_by_user_id(user_id=user_id)
+
+        if not user or not profile:
+            raise UserServiceException(
+                "У данного пользователя не существует профиля."
+            )
+
+        await self.profile_storage.update(user_id=user_id, data={})
+
+        return GetUserProfileSchema(
+            user_id=user_id,
+            email=user.email,
+            username=user.username,
+            full_name=profile.full_name,
+            phone_number=profile.phone_number,
+            image=profile.image,
+        )
+
+    async def get_profile(self, user_id: str) -> GetUserProfileSchema:
+        user = await self.storage.get_by_id(user_id)
+        profile = await self.profile_storage.get_by_user_id(user_id=user_id)
+        if not user or not profile:
+            raise UserServiceException(
+                "У данного пользователя не существует профиля."
+            )
+        return GetUserProfileSchema(
+            user_id=user_id,
+            email=user.email,
+            username=user.username,
+            full_name=profile.full_name,
+            phone_number=profile.phone_number,
+            image=profile.image,
+        )
+
+    async def upload_image(
+        self, image: UserImage, user_id: str
+    ) -> GetUserProfileSchema:
+        self.validate_file_extension(image)
+
+        user = await self.storage.get_by_id(user_id)
+        profile = await self.profile_storage.get_by_user_id(user_id=user_id)
+
+        if not user or not profile:
+            raise UserServiceException(
+                "У данного пользователя не существует профиля."
+            )
+        file_name = f"{user_id}.{image.filename.rsplit('.', 1)[1].lower()}"
+
+        self.save_user_file(
+            file=image,
+            directory=f"{self.path_file_storage}/users_img",
+            file_name=file_name,
+        )
+        path = f"users_img/{file_name}"
+        await self.profile_storage.update(
+            user_id=user_id, data={"image": path}
+        )
+
+        return GetUserProfileSchema(
+            user_id=user_id,
+            email=user.email,
+            username=user.username,
+            full_name=profile.full_name,
+            phone_number=profile.phone_number,
+            image=path,
+        )
 
     async def create(self, data: CreateUserSchema):
         await self.check_exist_email(data.email)
@@ -94,9 +179,28 @@ class UserService(BaseUserService):
     async def remove(self, user_id):
         await self.storage.delete_by_id(user_id=user_id)
 
+    def validate_file_extension(self, file: UserImage):
+        if not file.filename.endswith(".png") and not file.filename.endswith(
+            ".jpg"
+        ):
+            raise UserServiceException(
+                msg="Недопустимый тип файла. Разрешены только файлы формата png и jpg."
+            )
+
+    def save_user_file(self, file: UserImage, directory: str, file_name: str):
+        ensure_directory_exists(directory=directory)
+
+        path = f"{directory}/{file_name}"
+
+        with open(path, "wb+") as file_object:
+            file_object.write(file.file.read())
+
+        return path
+
 
 @lru_cache()
 def get_user_service(
     storage: BaseUserStorage = Depends(get_user_storage),
+    profile_storage: BaseProfileStorage = Depends(get_profile_storage),
 ) -> UserService:
-    return UserService(storage=storage)
+    return UserService(storage=storage, profile_storage=profile_storage)

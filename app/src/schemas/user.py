@@ -1,4 +1,6 @@
 from typing import Optional
+
+from fastapi import UploadFile
 from pydantic import BaseModel, EmailStr, Field
 
 from models.base import PydanticObjectId
@@ -22,7 +24,9 @@ class CreateUserSchema(BaseModel):
 
 
 class UpdateUserSchema(BaseModel):
-    username: Optional[str] = Field(min_length=3, max_length=50, example="user123")
+    username: Optional[str] = Field(
+        min_length=3, max_length=50, example="user123"
+    )
     full_name: Optional[str] = Field(
         min_length=3, max_length=100, example="Иванов Иван Иванович"
     )
@@ -31,12 +35,13 @@ class UpdateUserSchema(BaseModel):
     )
 
 
-class GetUserSchema(BaseModel):
-    id: PydanticObjectId
-    email: Optional[EmailStr] = None 
+class GetUserProfileSchema(BaseModel):
+    user_id: PydanticObjectId
+    email: Optional[EmailStr] = None
     username: Optional[str] = None
     full_name: Optional[str] = None
-    phone_number: Optional[str] = None 
+    phone_number: Optional[str] = None
+    image: Optional[str] = None
 
 
 class ChangePasswordUserSchema(BaseModel):
@@ -50,3 +55,7 @@ class ChangePasswordUserSchema(BaseModel):
 class ConfirmEmailSchema(BaseModel):
     email: EmailStr
     otp_code: str
+
+
+class UserImage(UploadFile):
+    pass

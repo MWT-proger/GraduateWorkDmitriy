@@ -6,7 +6,12 @@ from models.dataset import Dataset
 from models.forecast import ResultForecastModel
 from schemas import ConfirmEmailSchema, CreateUserSchema, LoginSchema
 from schemas.forecast import TrainTestDataSchema
-from schemas.user import ChangePasswordUserSchema
+from schemas.user import (
+    ChangePasswordUserSchema,
+    GetUserProfileSchema,
+    UpdateUserSchema,
+    UserImage,
+)
 from storages import BaseAuthStorage, BaseDatasetStorage, BaseUserStorage
 from storages.base import BaseAnomalyStorage, BaseForecastStorage
 
@@ -33,6 +38,22 @@ class BaseUserService(BaseService):
     async def change_password(
         self, user_id: str, data: ChangePasswordUserSchema
     ): ...
+
+    @abstractmethod
+    async def update(
+        self, data: UpdateUserSchema, user_id: str
+    ) -> GetUserProfileSchema:
+        pass
+
+    @abstractmethod
+    async def get_profile(self, user_id: str) -> GetUserProfileSchema:
+        pass
+
+    @abstractmethod
+    async def upload_image(
+        self, image: UserImage, user_id: str
+    ) -> GetUserProfileSchema:
+        pass
 
 
 class BaseAuthService(BaseService):
