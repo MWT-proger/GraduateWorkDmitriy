@@ -90,6 +90,12 @@ class UserStorageMongoDB(BaseUserStorage):
             },
         )
 
+    async def update(self, user_id: str, data: dict):
+        doc = await self.collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {"updated_at": datetime.now(), **data}},
+        )
+
 
 @lru_cache()
 def get_user_storage(

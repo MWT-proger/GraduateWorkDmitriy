@@ -71,15 +71,24 @@ class UserService(BaseUserService):
             raise UserServiceException(
                 "У данного пользователя не существует профиля."
             )
+        if data.username and data.username != user.username:
+            await self.check_exist_username(data.username)
 
-        await self.profile_storage.update(user_id=user_id, data={})
+        user_data = {"username": data.username}
+        profile_data = {
+            "full_name": data.full_name, 
+            "phone_number": data.phone_number,
+            }
+
+        await self.profile_storage.update(user_id=user_id, data=profile_data)
+        await self.storage.update(user_id=user_id, data=user_data)
 
         return GetUserProfileSchema(
             user_id=user_id,
             email=user.email,
-            username=user.username,
-            full_name=profile.full_name,
-            phone_number=profile.phone_number,
+            username=data.username,
+            full_name=data.full_name,
+            phone_number=data.phone_number,
             image=profile.image,
         )
 

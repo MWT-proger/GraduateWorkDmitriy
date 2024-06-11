@@ -4,6 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import ORJSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -40,6 +41,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/media", StaticFiles(directory=settings.FILE_STORAGE.PATH), name="media")
 
 app.include_router(api_v1.router, prefix="/api/v1")
 app.exception_handler(ServiceException)(service_exception_handler)

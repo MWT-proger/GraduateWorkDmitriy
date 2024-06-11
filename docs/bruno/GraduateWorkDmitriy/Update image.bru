@@ -1,0 +1,19 @@
+meta {
+  name: Update image
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{base_url}}/{{api_v1}}/users/img
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:multipart-form {
+  image: @file(/home/mwtech/Изображения/Снимки экрана/Снимок экрана от 2024-06-06 23-43-14.png)
+}

@@ -1,0 +1,23 @@
+meta {
+  name: update data
+  type: http
+  seq: 11
+}
+
+patch {
+  url: {{base_url}}/{{api_v1}}/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}
+
+body:json {
+  {
+  "username": "data_userbas",
+  "full_name": "B B B", 
+  "phone_number": "89999999999"
+  }
+}

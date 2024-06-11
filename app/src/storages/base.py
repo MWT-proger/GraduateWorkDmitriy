@@ -41,6 +41,9 @@ class BaseUserStorage(BaseStorage):
     @abstractmethod
     async def change_password(self, user_id: str, new_password: str): ...
 
+    @abstractmethod
+    async def update(self, user_id: str, data: dict): ...
+
 
 class BaseProfileStorage(BaseStorage):
 
